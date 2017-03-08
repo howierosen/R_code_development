@@ -9,32 +9,83 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Table try
+# GENERAL R FUNCTIONS
+## Open, Close and Directories
+### Quit
+  **quit()**
+  
+### Install Packages
+  **Install.packages("package_name")**
+  
+    If you want to use the package, you have to give the following command: Library(“package_name”)
+    
+    DON’T FORGET to put “ “ around package name, or it will give you error messages
 
-Brief Description | Command                                  | Comment
-------------------|------------------------------------------| -----------------------
-Quit R            | quit()                                   |
-                  |                                          |
-Install Package   | Install.packages(“package_name”)         |
-                  | If you want to use the package           |
-                  | you have to give the following command:   |
-                  | Library(“package_name”)                  |
+### Update all installed packages
+  **update.packages()**
+  
+### Getting Help
+  **Help(function)**
+  
+    e.g. help(plot)
+    
+    OR
+    ?function
+    e.g. ?plot
+    
+    OR
+    Apropos(“function”)
+    Lists all functions with string “function” in the name
+  
+    OR
+    Example(function)
+    Gets example of using the function
+    
+### See current working directory
+**getwd()**
+
+### List directory contents
+**dir("directory_path")**
+
+    Dir() ; this will list contents of current directory
+
+    List.files() ; this will do the same thing as dir
 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### Make new directory
+**Dir.create(“directory_name”)**
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+    Will create new directory in the current working directory
 
-```{r cars}
-summary(cars)
-```
+### Remove a directory
+**Unlink(“directory_name”, recursive = TRUE)**
 
-## Including Plots
+    This will remove a directory and everything in it
+    
+    DANGEROUS, this won’t ask you any questions, it’ll just delete it
+    
+### Change Working directory
+**Setwd(“directory_path” )**
 
-You can also embed plots, for example:
+    The path has to be in “quotes”. You can use “..” to indicate one directory above
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Working with data files
+
+###	Import a data file, like a .csv file
+**mydata <- read.table( “path\mydata.csv” , header = TRUE, sep = “,” , row.names =         “id”)**
+    
+    OR
+    mydaya <- read.csv(“path\datafile.csv”)
+
+    You can read in other types of files if you indicate a different separator, for           instance, for a tab separated file you would do:
+    
+    mydata <- read.table( “path\mydata.tsv” , header = TRUE, sep = “\t”, row.names=“id”)
+
+    DON’T FORGET  to use the header and sep arguments and to include the .csv or it won’t     read the file in correctly
+
+## Import a .csv file, if you know it’s a .csv file
+  **mydata <- read.csv( “path\mydata.csv” , header = TRUE, row.names = “id”)**
+  
+     Here, you don’t have to specify the separator, cause it assumes comma separated
+
