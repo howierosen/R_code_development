@@ -19,6 +19,16 @@ The most useful to start with is probably
 
 https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf
 
+# Created sample dataset
+
+Created small sample dataset, saved in file named test.frame.csv
+
+It looks like this (commands below read it in and display the data):
+
+```{r load_show_test.frame}
+test.frame.local <- read.csv("test.frame.csv")
+test.frame.local
+```
 
 
 # GENERAL R FUNCTIONS

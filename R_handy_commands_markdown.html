@@ -130,6 +130,32 @@ $(document).ready(function () {
 <p>The most useful to start with is probably</p>
 <p><a href="https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf</a></p>
 </div>
+<div id="created-sample-dataset" class="section level1">
+<h1>Created sample dataset</h1>
+<p>Created small sample dataset, saved in file named test.frame.csv</p>
+<p>It looks like this (commands below read it in and display the data):</p>
+<pre class="r"><code>test.frame.local &lt;- read.csv(&quot;test.frame.csv&quot;)
+test.frame.local</code></pre>
+<pre><code>##    PIDN age sex  dx visit volume1 volume2
+## 1  1111  55   m CON     1     100      15
+## 2  1111  56   m CON     2      90      11
+## 3  1111  57   m CON     3      80      10
+## 4  1111  58   m CON     4      70       9
+## 5  2222  60   f  BV     1      90      18
+## 6  2222  61   f  BV     2      85      19
+## 7  2222  62   f  BV     3      75      17
+## 8  3333  66   m CON     1      80      22
+## 9  3333  67   m CON     2      77      20
+## 10 3333  68   m CON     3      75      20
+## 11 4444  56   f  BV     1      70      19
+## 12 4444  57   f  BV     2      65      14
+## 13 5555  62   m  BV     1      70      15
+## 14 5555  63   m  BV     2      65      12
+## 15 5555  64   m  BV     3      60      11
+## 16 5555  65   m  BV     4      60      10
+## 17 6666  58   f CON     1      60      18
+## 18 6666  59   f CON     2      55      17</code></pre>
+</div>
 <div id="general-r-functions" class="section level1">
 <h1>GENERAL R FUNCTIONS</h1>
 <div id="open-close-and-directories" class="section level2">
@@ -698,6 +724,10 @@ latter removes multiple objects</code></pre>
 <p>e.g.</p>
 <p>cnames &lt;- c(“visit1”, “visit2”, “visit3”, “visit4”)</p>
 <p>colnames(x) &lt;- cnames</p>
+</div>
+<div id="change-name-of-a-column-in-a-dataframe" class="section level3">
+<h3>Change name of a column in a dataframe</h3>
+<pre><code>  colnames(data.frame)[col_number] &lt;- “new_name”</code></pre>
 </div>
 </div>
 </div>
