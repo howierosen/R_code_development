@@ -803,6 +803,10 @@ latter removes multiple objects</code></pre>
 <pre><code>  Newdata &lt;- my.data [order (mpg,  - cyl), ]</code></pre>
 <p>Above command will sort all the data in my.data by the variable mpg in ascending order and then the variable cyl in descending order and save the sorted data to a new variable, “newdata”</p>
 </div>
+<div id="remove-rows-from-a-data-frame" class="section level3">
+<h3>Remove rows from a data frame</h3>
+<pre><code>  Dataset_name &lt;- dataset_name [ -c(row#, row#...),  ]</code></pre>
+</div>
 </div>
 </div>
 <div id="examining-data" class="section level1">
@@ -1087,6 +1091,37 @@ latter removes multiple objects</code></pre>
 <p>e.g.</p>
 <p>subset(patient_data, dx==”AD” | dx==”FTD”)</p>
 <p>This will get all the column data for the rows where diagnosis is AD or where diagnosis if FTD</p>
+</div>
+<div id="apply-a-function-to-some-data-according-to-levels-of-another-variable" class="section level3">
+<h3>Apply a function to some data according to levels of another variable</h3>
+<pre><code>  by(data, factor_variable, function) </code></pre>
+<p>e.g.</p>
+<p>by(my.data<span class="math inline">\(age, my.data\)</span>diagnosis, mean)</p>
+<p>this command with provide the means for the variable age at each level of diagnosis</p>
+</div>
+<div id="apply-a-function-to-some-data-specifying-the-data-that-goes-into-the-function-or-limiting-the-input" class="section level3">
+<h3>Apply a function to some data specifying the data that goes into the function (or limiting the input)</h3>
+<pre><code>  with(data, expresssion) </code></pre>
+<p>e.g.</p>
+<p>with(my.data<span class="math inline">\(diagnosis == “FTD”, mean(my.data\)</span>age))</p>
+<p>this command with provide the means for the variable age for those with a diagnosis of FTD</p>
+</div>
+<div id="aggregating-data" class="section level3">
+<h3>Aggregating data</h3>
+<pre><code>  Newobjects &lt;- aggregate(data=data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
+
+OR
+
+  Newobject &lt;- aggregate(variables_to_aggregate~variables_for_grouping, data=data.frame, FUN=function, na.rm=TRUE)</code></pre>
+<p>e.g.</p>
+<p>means &lt;- aggregate (size.data, by = list(agegroup, sex), FUN = mean, na.rm = TRUE)</p>
+<p>This command will aggregate all the numeric data in the dataset called size.data and produce means for each numeric variable grouped according to the agegroup and sex variable (4 means per numeric variable)</p>
+<p>OR, example with more concise code</p>
+<p>e.g.</p>
+<p>agg_gap_country &lt;- aggregate(.~country, data=gapM, FUN=mean)</p>
+<p>Here, you are getting the mean of all the variables in the dataset gapM, divided according to country. The . means all, the ~ means by.</p>
+<p>agg_gap_country &lt;- aggregate(pop~country, data=gapM, FUN=mean)</p>
+<p>Here, you are doing the same thing, but only for the variable pop</p>
 </div>
 </div>
 </div>

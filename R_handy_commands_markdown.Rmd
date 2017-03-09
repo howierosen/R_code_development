@@ -1391,11 +1391,58 @@ this command with provide the means for the variable age for those with a diagno
 
 ### Aggregating data	
 
-    Newobjects <- aggregate(data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
+      Newobjects <- aggregate(data=data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
+
+    OR
+    
+      Newobject <- aggregate(variables_to_aggregate~variables_for_grouping, data=data.frame, FUN=function, na.rm=TRUE)
 
 e.g.
 
 means <- aggregate (size.data, by = list(agegroup, sex), FUN = mean, na.rm = TRUE)
 
 This command will aggregate all the numeric data in the dataset called size.data and produce means for each numeric variable grouped according to the agegroup and sex variable (4 means per numeric variable)
+
+OR, example with more concise code
+
+e.g.
+
+agg_gap_country <- aggregate(.~country, data=gapM, FUN=mean)
+
+Here, you are getting the mean of all the variables in the dataset gapM, divided according to country. The . means all, the ~ means by.
+
+agg_gap_country <- aggregate(pop~country, data=gapM, FUN=mean)
+
+Here, you are doing the same thing, but only for the variable pop
+
+### Find observations with missing data in a variable of interest	
+
+      is.na(dataset_name$variable)
+
+or can find lines where the variable of interest is not missing
+
+!is.na(dataset_name$variable)
+
+### Omit observations with missing data
+
+      na.omit(dataset_name$variable)
+
+### Identify rows with NA values in ANY of the variables in the row	
+
+        complete.cases(dataset_name)
+e.g.
+
+my.data[complete.cases(my.data), ]
+
+This command will extract the rows that have complete data in the my.data dataset
+
+e.g.
+
+my.data[ ! complete.cases(my.data), ]
+
+This command will extract the rows that DO NOT have complete data in the my.data dataset
+
+The complete cases command returns a vector with one line for each line in the data frame, and the value TRUE for those lines that are complete
+
+
 
