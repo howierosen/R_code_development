@@ -729,6 +729,365 @@ latter removes multiple objects</code></pre>
 <h3>Change name of a column in a dataframe</h3>
 <pre><code>  colnames(data.frame)[col_number] &lt;- “new_name”</code></pre>
 </div>
+<div id="join-two-vectorsmatrices-by-columns" class="section level3">
+<h3>Join two vectors/matrices by columns</h3>
+<pre><code>  cbind(object_name, object_name)</code></pre>
+<p>e.g.</p>
+<p>x</p>
+<p>[1] 1 2 3 5</p>
+<p>[2] 10 14 19 22</p>
+<p>y</p>
+<p>[1] 3 3</p>
+<p>[2] 4 5</p>
+<p>cbind(x[ ,4], y[ ,1])</p>
+<p><em>spacer</em> [ , 1] [ ,2]</p>
+<p>[1, ] 5 3</p>
+<p>[2, ] 22 4</p>
+</div>
+<div id="join-two-vectorsmatrices-by-rows" class="section level3">
+<h3>Join two vectors/matrices by rows</h3>
+<pre><code>  rbind(object_name1[position], object_name2[position])</code></pre>
+<p>e.g.</p>
+<p>x</p>
+<p>[1] 1 2 3 5</p>
+<p>[2] 10 14 19 22</p>
+<p>y</p>
+<p>[1] 3 3 4 9</p>
+<p>[2] 4 5 10 20</p>
+<p>rbind(x[ 1, ], y[2, ])</p>
+<p><em>spacer</em> [ , 1] [ ,2] [ ,3] [ ,4] [1, ] 1 2 3 5 [2, ] 4 5 10 20</p>
+</div>
+<div id="creating-a-data-frame" class="section level3">
+<h3>Creating a data frame</h3>
+<pre><code>Dateframe_name &lt;- data.frame(object1_name = c(value1, value2, …), object2_name = c(value1, value2, …), object3_name = c(value1, value2,…)</code></pre>
+<p>e.g.</p>
+<p>staff.data &lt;- data.frame(name = c(“Howie”, “yann”, “gabe”), height = c(“short”, “tall”, “tall”), age = c(51 40 24))</p>
+<p><em>sp</em> name height age</p>
+<p>1 howie short 51</p>
+<p>2 yann tall 40</p>
+<p>3 gabe tall 24</p>
+<p>If already created the name, height and age variables, can just do this: Staff.data &lt;- c(name, height, age)</p>
+</div>
+<div id="adding-columns-to-a-data-frame" class="section level3">
+<h3>Adding columns to a data frame</h3>
+<pre><code>  Frame_name$new_variable_name &lt;- c(value1, value2, …)</code></pre>
+<p>e.g.</p>
+<p>staff.data$howmuchhair &lt;- c(“not much”, “a lot”, “a lot”)</p>
+<p>staff.data</p>
+<p><em>sp</em> name height age howmuchhair</p>
+<p>1 howie short 51 not much</p>
+<p>2 yann tall 40 a lot</p>
+<p>3 gabe tall 24 a lot</p>
+</div>
+<div id="adding-columns-to-a-data-frame-other-ways" class="section level3">
+<h3>Adding columns to a data frame other ways</h3>
+<pre><code>  data$size &lt;- c(&quot;small&quot;, &quot;large&quot;, &quot;medium&quot;) 
+  data[[&quot;size&quot;]] &lt;- c(&quot;small&quot;, &quot;large&quot;, &quot;medium&quot;) data[,&quot;size&quot;]  &lt;- c(&quot;small&quot;, &quot;large&quot;, &quot;medium&quot;) 
+  data$size      &lt;- 0
+  </code></pre>
+</div>
+<div id="move-a-column-from-one-location-to-the-beginning-of-a-dataset" class="section level3">
+<h3>Move a column from one location to the beginning of a dataset</h3>
+<pre><code>  example
+  col_idx &lt;- grep(&quot;string&quot;, names(dataset))
+  dataset &lt;- dataset[, c(col_idx, (1:ncol(dataset))[-col_idx])]
+  names(dataset)</code></pre>
+<p>Here, you are using grep to find the location of the columns with names containing the “string” you have specified, you save those locations to an objects, then you rewrite the dataset using data from all rows of the dataset in the columns saved in col_idx first, and then all other columns in the dataset excluding those at the positions saved in col_idx.</p>
+</div>
+<div id="sorting-data" class="section level3">
+<h3>Sorting data</h3>
+<pre><code>  Newdata &lt;- my.data [order (mpg), ]</code></pre>
+<p>Above command will sort all the data in my.data by the variable mpg and save the sorted data to a new variable, “newdata”</p>
+<pre><code>  Newdata &lt;- my.data [order (mpg, cyl), ]</code></pre>
+<p>Above command will sort all the data in my.data by the variable mpg and then the variable cyl and save the sorted data to a new variable, “newdata”</p>
+<pre><code>  Newdata &lt;- my.data [order (mpg,  - cyl), ]</code></pre>
+<p>Above command will sort all the data in my.data by the variable mpg in ascending order and then the variable cyl in descending order and save the sorted data to a new variable, “newdata”</p>
+</div>
+</div>
+</div>
+<div id="examining-data" class="section level1">
+<h1>EXAMINING DATA</h1>
+<div id="examining-objects-vectors" class="section level2">
+<h2>Examining Objects, Vectors</h2>
+<div id="reading-an-object" class="section level3">
+<h3>Reading an object</h3>
+<pre><code>  View(object_name)
+  </code></pre>
+</div>
+<div id="find-length-of-an-objects" class="section level3">
+<h3>Find length of an objects</h3>
+<pre><code>  length(object_name)</code></pre>
+<p>e.g.</p>
+<p>x</p>
+<p>[1] 1 9 3 5 9</p>
+<p>length(x)</p>
+<p>[1] 5</p>
+</div>
+<div id="see-the-type-of-an-object" class="section level3">
+<h3>See the type of an object</h3>
+<pre><code>  Class(object_name)</code></pre>
+<p>Above command will return data.frame if it’s a dataframe, numeric if it’s numeric, etc…</p>
+<p>As compared with mode, class seems more useful to tell you what properties an object has, what you can do to it and what you can’t</p>
+</div>
+<div id="find-type-of-data-in-objects" class="section level3">
+<h3>Find type of data in objects</h3>
+<pre><code>  mode(object_name)</code></pre>
+<p>If you want to know if a vector is character vs integer vs float, use mode</p>
+<p>e.g.</p>
+<p>x</p>
+<p>[1] 1 9 3 5 9</p>
+<p>mode(x)</p>
+<p>[1] “numeric”</p>
+</div>
+<div id="see-the-dimensions-of-an-object" class="section level3">
+<h3>See the dimensions of an object</h3>
+<pre><code>  dim(object_name)
+  </code></pre>
+<p>remember can also use dim to seaprate a vector into a matrix (see generating data)</p>
+</div>
+<div id="evaluate-whether-two-arguments-are-identical" class="section level3">
+<h3>Evaluate whether two arguments are identical</h3>
+<pre><code>  identical(argument1, argument2)</code></pre>
+<p>e.g.</p>
+<p>identical(7, 7)</p>
+<p>TRUE</p>
+<p>This can help you decide whether the contents of two objects are the same</p>
+</div>
+<div id="evaluate-two-arguments-and-return-true-if-they-are-not-both-true-or-both-false" class="section level3">
+<h3>Evaluate two arguments and return TRUE if they are not both true or both FALSE</h3>
+<pre><code>    xor(argument1, argument2)</code></pre>
+<p>This function will return TRUE if one argument is FALSE and one argument is TRUE. If both are TRUE, or both are FALSE, the function will return FALSE e.g.</p>
+<p>xor(7&gt;7, 3==3) TRUE</p>
+</div>
+<div id="find-the-value-for-an-element-in-a-vector" class="section level3">
+<h3>Find the value for an element in a vector</h3>
+<pre><code>  Object_name[element_number]</code></pre>
+<p>e.g. x[7]</p>
+<p>This will show the value of the 7th element in the vector called x</p>
+<p>e.g.</p>
+<p>x[length(x)]</p>
+<p>This will find the value of the last element in a vector, regardless of how long it is</p>
+</div>
+<div id="list-levels-in-a-factor-variable" class="section level3">
+<h3>List levels in a factor variable</h3>
+<pre><code>  levels(dataset_name$variable_name)
+  </code></pre>
+</div>
+<div id="look-at-factor-level-as-its-integer" class="section level3">
+<h3>Look at factor level as its integer</h3>
+<pre><code>  as.integer(dataset_name$variable_name)
+  </code></pre>
+</div>
+<div id="look-for-a-particular-string-in-a-dataset" class="section level3">
+<h3>Look for a particular string in a dataset</h3>
+<pre><code>  grep(“string”, object)</code></pre>
+<p>e.g.</p>
+<p>myname &lt;- grep(“Howie”, namelist)</p>
+<p>This would find the position of the name howie in a column of names and assign it to the variable myname The variable myname would not have the string “Howie” in it, just the row number or column number where it is in the larger dataset</p>
+</div>
+<div id="get-descriptors-for-a-variable" class="section level3">
+<h3>Get descriptors for a variable</h3>
+<pre><code>  mean(dataset_name$variable, na.rm = TRUE)
+  median(dataset_name$variable, na.rm = TRUE)
+  min(dataset_name$variable, na.rm = TRUE)
+  max(dataset_name$variable, na.rm = TRUE)
+  sd(dataset_name$variable, na.rm = TRUE)</code></pre>
+<p>Using na.rm = T means you should leave NA observations out of the equation</p>
+</div>
+</div>
+<div id="examining-matrices-dataframes" class="section level2">
+<h2>Examining Matrices, Dataframes</h2>
+<div id="counting-columns-and-rows-in-data-frame" class="section level3">
+<h3>Counting columns and rows in data frame</h3>
+<pre><code>  ncol(frame_name)
+  nrow(frame_name)</code></pre>
+</div>
+<div id="read-beginning-and-ends-of-datasets" class="section level3">
+<h3>Read beginning and ends of datasets</h3>
+<pre><code>  Head(dataset_name)
+  Tail(dataset_name)</code></pre>
+<p>OR</p>
+<p>Head(dataset_name, #rows)</p>
+<p>Tail(dataset_name, #rows)</p>
+<p>To specify the number of rows to be shown (instead of the default 6)</p>
+</div>
+<div id="list-names-of-variables-in-dataset" class="section level3">
+<h3>List names of variables in dataset</h3>
+<pre><code>  names(dataset_name)</code></pre>
+</div>
+<div id="list-variables-in-dataset-with-info-about-each" class="section level3">
+<h3>List variables in dataset with info about each</h3>
+<pre><code>  str(dataset_name)
+  </code></pre>
+<p>Give a bit about type of each variable, and initial few values</p>
+</div>
+<div id="summarize-properties-of-variables-in-dataset" class="section level3">
+<h3>Summarize properties of variables in dataset</h3>
+<pre><code>  summary(dataset_name)</code></pre>
+<p>For numeric variables, will give mean, median, max, min and 1st and 3rd quartiles</p>
+<p>For character variables, will give counts for each level</p>
+</div>
+</div>
+<div id="subsetting-various-ways" class="section level2">
+<h2>Subsetting various ways</h2>
+<div id="get-value-at-a-specific-position-in-a-vector" class="section level3">
+<h3>Get value at a specific position in a vector</h3>
+<pre><code>  Object_name[position]
+  </code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 2, 3, 5)</p>
+<p>x [4]</p>
+<p>[1] 5</p>
+</div>
+<div id="get-values-at-multiple-positions-in-a-vector" class="section level3">
+<h3>Get values at multiple positions in a vector</h3>
+<pre><code>  Object_name[c(position, position, …)]</code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 2, 3, 5)</p>
+<p>x [ c(1,4) ]</p>
+<p>[1] 1 5</p>
+<p>You have to combine the positions into a vector or it will think you are looking at a matrix and get confused</p>
+<p>OR</p>
+<pre><code>  Object_name[c(sequence)]</code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 2, 3, 5)</p>
+<p>x [1:3]</p>
+<p>[1] 1 2 3</p>
+<p>OR, designate a position to ignore</p>
+<pre><code>  Object_name[-position_to_ignore]
+  </code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 2, 3, 5)</p>
+<p>x [-3]</p>
+<p>[1] 1 2 5</p>
+<p>OR, designate multiple positions to ignore</p>
+<pre><code>  Object_name[-c(position, position, …)]</code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 2, 3, 5)</p>
+<p>x [-c(2, 3)]</p>
+<p>[1] 1 5</p>
+<p>this last command uses the negative sign to tell R to give the elements in the object, ignoring the specified positions</p>
+</div>
+<div id="get-value-at-specific-position-in-a-matrix" class="section level3">
+<h3>Get value at specific position in a matrix</h3>
+<pre><code>  Object_name[row_position, column_position]</code></pre>
+<p>e.g.</p>
+<p>This makes a matrix with two rows:</p>
+<p>x &lt;- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))</p>
+<p>This gets value at row 2, column 3:</p>
+<p>x[2,3]</p>
+<p>[1] 19</p>
+<p>OR to get a whole row</p>
+<p>x[2, ]</p>
+<p>[1] 10 14 19 22</p>
+<p>OR to get a whole column</p>
+<p>x[ , 4]</p>
+<p>[1] 5 22</p>
+<p>e.g.</p>
+<p>OR, to look at a data frame with a column with string data:</p>
+<p>staff.data[3, 2]</p>
+<p>[1] tall</p>
+<p>levels: short tall</p>
+<p>OR</p>
+<p>To list all the values in a particular variable in a data frame:</p>
+<pre><code>  frame_name$object_name</code></pre>
+<p>e.g.</p>
+<p>staff.data$height</p>
+<p>[1] “short” “tall” “tall”</p>
+</div>
+<div id="get-values-from-a-matrix-and-keep-the-result-as-a-matrix-instead-of-a-vector" class="section level3">
+<h3>Get values from a matrix and keep the result as a matrix instead of a vector</h3>
+<pre><code>Object_name[row_position, column_position, drop = FALSE]</code></pre>
+<p>e.g.</p>
+<p>x &lt;- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))</p>
+<p>x[2, , drop = FALSE]</p>
+<p><em>spacerrr</em> [ , 1] [ ,2] [ ,3] [ ,4]</p>
+<p>[1, ] 10 14 19 22</p>
+<p>If you do this command and do not include the drop =FALSE parameter, R would just make a vector, not a matrix because the result would have just one row of values</p>
+</div>
+<div id="identifying-elements-that-meet-specific-criteria" class="section level3">
+<h3>Identifying elements that meet specific criteria</h3>
+<pre><code>  Object_name[test]</code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 2, 3, 5)</p>
+<p>x [ x&gt;3 ]</p>
+<p>[1] 5</p>
+<p>this command gave us the element in object x that was greater than 3</p>
+</div>
+<div id="querying-data-frame-using-conditions" class="section level3">
+<h3>Querying data frame using conditions</h3>
+<pre><code>Frame_name[frame_name$variable_name condition]</code></pre>
+<p>e.g.</p>
+<p>staff.data[staff.data$height == “tall”]</p>
+<p><em>sp</em> name height age</p>
+<p>2 yann tall 40</p>
+<p>3 gabe tall 24</p>
+<p>Another example</p>
+<p>e.g.</p>
+<p>staff.data[staff.data$age &gt; 30, ]</p>
+<p><em>sp</em> name height age</p>
+<p>1 howie short 51</p>
+<p>2 yann tall 40</p>
+<p>Another example</p>
+<p>e.g.</p>
+<p>staff.data[staff.data$height == “tall”, “name”]</p>
+<p>[1] “yann” “gabe”</p>
+<p>Another example</p>
+<p>e.g.</p>
+<p>staff.data[staff.data$height == “tall”, c(“name”, “age”]</p>
+<p><em>sp</em> name age</p>
+<p>2 yann 40</p>
+<p>3 gabe 24</p>
+</div>
+<div id="probe-elements-in-a-vector-to-get-the-positions-of-those-meeting-certain-criteria" class="section level3">
+<h3>Probe elements in a vector to get the <strong>positions</strong> of those meeting certain criteria</h3>
+<pre><code>  which(object_name criterion)</code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 3, 8, 10)</p>
+<p>which( x &gt;7)</p>
+<p>3, 4</p>
+</div>
+<div id="see-if-any-elements-in-a-dataset-meet-specific-criteria" class="section level3">
+<h3>See if any elements in a dataset meet specific criteria</h3>
+<pre><code>  any(object_name criterion)</code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 3, 8, 10)</p>
+<p>any( x &gt; 7)</p>
+<p>TRUE</p>
+</div>
+<div id="see-if-all-elements-in-a-dataset-meet-specific-criteria" class="section level3">
+<h3>See if all elements in a dataset meet specific criteria</h3>
+<pre><code>  all(object_name criterion)</code></pre>
+<p>e.g.</p>
+<p>x &lt;- c(1, 3, 8, 10)</p>
+<p>all( x &gt; 7)</p>
+<p>FALSE</p>
+</div>
+<div id="subsetting-a-column-based-on-the-name" class="section level3">
+<h3>Subsetting a column based on the name</h3>
+<pre><code>  Object_name[“element_name”]</code></pre>
+<p>If you want to get the values of a whole column based on the column name, you can do this</p>
+<p>e.g.</p>
+<p>x &lt;- c(1 = “first”, 2 =”second”, 3 =”third”)</p>
+<p>x</p>
+<p>first second third</p>
+<p>1 2 3</p>
+<p>x[“second”] second 2</p>
+</div>
+<div id="subsetting-rows-in-a-data-frame" class="section level3">
+<h3>Subsetting rows in a data frame</h3>
+<pre><code>  subset(frame_name, condition)</code></pre>
+<p>e.g</p>
+<p>subset(staff.data, age &gt; 30 )</p>
+<p><em>sp</em> name height age</p>
+<p>1 howie short 51</p>
+<p>2 yann tall 40</p>
+<p>Can combine multiple conditions for subset:</p>
+<pre><code>  Subset(frame_name, variable1==condition | variable1==condition)</code></pre>
+<p>e.g.</p>
+<p>subset(patient_data, dx==”AD” | dx==”FTD”)</p>
+<p>This will get all the column data for the rows where diagnosis is AD or where diagnosis if FTD</p>
+</div>
 </div>
 </div>
 

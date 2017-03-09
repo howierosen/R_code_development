@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -825,10 +825,577 @@ colnames(x) <- cnames
 
       colnames(data.frame)[col_number] <- “new_name”
 
+### Join two vectors/matrices by columns	
+
+      cbind(object_name, object_name)
+
+e.g.
+
+x
+
+[1] 1    2   3   5
+
+[2] 10 14 19 22
+
+y
+
+[1] 3    3
+
+[2] 4    5
+
+cbind(x[ ,4], y[ ,1])
+
+*spacer*    [ , 1]  [  ,2] 
+
+[1, ]        5        3
+
+[2,  ]      22       4
+
+### Join two vectors/matrices by rows	
+
+      rbind(object_name1[position], object_name2[position])
+e.g.
+
+x
+
+[1] 1    2   3   5
+
+[2] 10 14 19 22
+
+y
+
+[1] 3    3   4   9
+
+[2] 4    5   10  20
+
+rbind(x[ 1, ], y[2, ])
+
+*spacer*    [ , 1]  [  ,2]   [  ,3]   [  ,4]
+[1, ]       1        2         3         5
+[2, ]       4       5         10       20
+
+### Creating a data frame	
+
+    Dateframe_name <- data.frame(object1_name = c(value1, value2, …), object2_name = c(value1, value2, …), object3_name = c(value1, value2,…)
+
+e.g.
+
+staff.data <- data.frame(name = c(“Howie”, “yann”, “gabe”), height = c(“short”, “tall”, “tall”), age = c(51 40 24))
+
+*sp* name   height   age
+
+1   howie   short    51
+
+2   yann      tall       40
+
+3   gabe      tall        24
+
+If already created the name, height and age variables, can just do this:
+Staff.data <- c(name, height, age)
+
+### Adding columns to a data frame	
+
+      Frame_name$new_variable_name <- c(value1, value2, …)
+
+e.g.
+
+
+staff.data$howmuchhair <- c(“not much”, “a lot”, “a lot”)
+
+staff.data
+
+*sp* name   height   age  howmuchhair
+
+1   howie   short    51    not much
+
+2   yann      tall       40    a lot
+
+3   gabe      tall        24   a lot
+
+### Adding columns to a data frame other ways	
+
+      data$size <- c("small", "large", "medium") 
+      data[["size"]] <- c("small", "large", "medium") data[,"size"]  <- c("small", "large", "medium") 
+      data$size      <- 0
+      
+### Move a column from one location to the beginning of a dataset	
+
+      example
+      col_idx <- grep("string", names(dataset))
+      dataset <- dataset[, c(col_idx, (1:ncol(dataset))[-col_idx])]
+      names(dataset)
+
+Here, you are using grep to find the location of the columns with names containing the “string” you have specified, you save those locations to an objects, then you rewrite the dataset using data from all rows of the dataset in the columns saved in col_idx first, and then all other columns in the dataset excluding those at the positions saved in col_idx.
+
+### Sorting data	
+
+      Newdata <- my.data [order (mpg), ]
+Above command will sort all the data in my.data by the variable mpg and save the sorted data to a new variable, “newdata”
+
+      Newdata <- my.data [order (mpg, cyl), ]
+Above command will sort all the data in my.data by the variable mpg and then the variable cyl and save the sorted data to a new variable, “newdata”
+
+      Newdata <- my.data [order (mpg,  - cyl), ]
+Above command will sort all the data in my.data by the variable mpg in ascending order and then the variable cyl in descending order and save the sorted data to a new variable, “newdata”
+
+### Remove rows from a data frame	
+
+      Dataset_name <- dataset_name [ -c(row#, row#...),  ]
+
+# EXAMINING DATA
+
+## Examining Objects, Vectors
+
+### Reading an object
+    
+      View(object_name)
+      
+### Find length of an objects	
+
+      length(object_name)
+
+e.g.  
+
+x
+
+[1] 1 9 3 5 9
+
+length(x)
+
+[1] 5
+
+
+### See the type of an object	
+
+      Class(object_name)
+Above command will return data.frame if it’s a dataframe, numeric if it’s numeric, etc…
+
+As compared with mode, class seems more useful to tell you what properties an object has, what you can do to it and what you can't
+
+### Find type of data in objects	
+
+      mode(object_name)
+If you want to know if a vector is character vs integer vs float, use mode
+
+e.g.  
+
+x
+
+[1] 1 9 3 5 9
+
+mode(x)
+
+[1] “numeric”
+
+
+### See the dimensions of an object	
+
+      dim(object_name)
+      
+remember can also use dim to seaprate a vector into a matrix (see generating data)
+
+### Evaluate whether two arguments are identical	
+
+      identical(argument1, argument2)
+e.g.
+
+identical(7, 7)
+
+TRUE
+
+This can help you decide whether the contents of two objects are the same
+
+### Evaluate two arguments and return TRUE if they are not both true or both FALSE	
+
+        xor(argument1, argument2)
+
+This function will return TRUE if one argument is FALSE and one argument is TRUE. If both are TRUE, or both are FALSE, the function will return FALSE
+e.g.
+
+xor(7>7, 3==3)
+TRUE
+
+### Find the value for an element in a vector	
+
+      Object_name[element_number]
+
+e.g. x[7]
+
+This will show the value of the 7th element in the vector called x
+
+e.g.
+
+x[length(x)]
+
+This will find the value of the last element in a vector, regardless of how long it is
+
+### List levels in a factor variable
+
+      levels(dataset_name$variable_name)
+      
+### Look at factor level as its integer	
+
+      as.integer(dataset_name$variable_name)
+      
+### Look for a particular string  in a dataset	
+
+      grep(“string”, object)
+
+e.g.
+
+myname <- grep(“Howie”, namelist)
+
+This would find the position of the name howie in a column of names and assign it to the variable myname	The variable myname would not have the string “Howie” in it, just the row number or column number where it is in the larger dataset
+
+
+### Get descriptors for a variable	
+
+      mean(dataset_name$variable, na.rm = TRUE)
+      median(dataset_name$variable, na.rm = TRUE)
+      min(dataset_name$variable, na.rm = TRUE)
+      max(dataset_name$variable, na.rm = TRUE)
+      sd(dataset_name$variable, na.rm = TRUE)
+
+Using na.rm = T means you should leave NA observations out of the equation
 
 
 
+## Examining Matrices, Dataframes
+
+### Counting columns and rows in data frame	
+    
+      ncol(frame_name)
+      nrow(frame_name)
+
+### Read beginning and ends of datasets	
+
+      Head(dataset_name)
+      Tail(dataset_name)
+
+OR
+
+Head(dataset_name, #rows)
+
+Tail(dataset_name, #rows)
+
+To specify the number of rows to be shown (instead of the default 6)
+
+### List names of variables in dataset	
+
+      names(dataset_name)
+
+### List variables in dataset with info about each	  
+      str(dataset_name)
+      
+Give a bit about type of each variable, and initial few values
+
+### Summarize properties of variables in dataset
+
+      summary(dataset_name)
+
+For numeric variables, will give mean, median, max, min and 1st and 3rd quartiles
+
+For character variables, will give counts for each level
 
 
+## Subsetting various ways
 
+### Get value at a specific position in a vector
+
+      Object_name[position]
+      
+e.g.
+
+x <- c(1, 2, 3, 5)
+
+x [4]
+
+[1] 5
+    
+
+### Get values at multiple positions in a vector	
+
+      Object_name[c(position, position, …)]
+
+e.g.
+
+x <- c(1, 2, 3, 5)
+
+x [ c(1,4) ]
+
+[1] 1 5
+
+You have to combine the positions into a vector or it will think you are looking at a matrix and get confused
+
+OR
+
+      Object_name[c(sequence)]
+e.g.
+
+x <- c(1, 2, 3, 5)
+
+x [1:3]
+
+[1] 1 2 3
+
+OR, designate a position to ignore
+
+      Object_name[-position_to_ignore]
+      
+e.g.
+
+x <- c(1, 2, 3, 5)
+
+x [-3]
+
+[1] 1 2 5
+
+OR, designate multiple positions to ignore
+
+      Object_name[-c(position, position, …)]
+
+e.g.
+
+x <- c(1, 2, 3, 5)
+
+x [-c(2, 3)]
+
+[1] 1 5
+
+this last command uses the negative sign to tell R to give the elements in the object, ignoring the specified positions
+
+### Get value at specific position in a matrix	
+
+      Object_name[row_position, column_position]
+
+e.g.
+
+This makes a matrix with two rows:
+
+x <- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))
+
+This gets value at row 2, column 3:
+
+x[2,3]
+
+[1] 19
+
+OR to get a whole row
+
+x[2, ]
+
+[1] 10 14 19 22
+
+OR to get a whole column
+
+x[ , 4]
+
+[1] 5 22
+
+e.g.
+
+OR, to look at a data frame with a column with string data:
+
+staff.data[3, 2]
+
+[1] tall
+
+levels: short tall
+
+OR
+
+To list all the values in a particular variable in a data frame:
+      
+      frame_name$object_name
+
+e.g.
+
+staff.data$height
+
+[1] “short” “tall” “tall”
+
+
+### Get values from a matrix and keep the result as a matrix instead of a vector	
+
+    Object_name[row_position, column_position, drop = FALSE]
+
+e.g.
+
+x <- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))
+
+
+x[2,  , drop = FALSE]
+
+*spacerrr* [ , 1]  [  ,2]   [  ,3]   [  ,4]
+
+[1, ]       10     14      19       22
+
+If you do this command and do not include the drop =FALSE parameter, R would just make a vector, not a matrix because the result would have just one row of values
+
+### Identifying elements that meet specific criteria	
+      
+      Object_name[test]
+e.g.
+
+x <- c(1, 2, 3, 5)
+
+x [ x>3 ]
+
+[1] 5
+
+this command gave us the element in object x that was greater than 3
+
+### Querying data frame using conditions	
+
+    Frame_name[frame_name$variable_name condition]
+e.g.
+
+staff.data[staff.data$height == “tall”]
+
+*sp*  name   height   age
+
+2   yann      tall       40
+
+3   gabe      tall        24
+
+Another example
+
+e.g.
+
+staff.data[staff.data$age > 30, ]
+
+*sp*  name   height   age
+
+1   howie   short    51
+
+2   yann      tall       40
+
+Another example
+
+e.g.
+
+staff.data[staff.data$height == “tall”, “name”]
+
+[1] “yann” “gabe”
+
+Another example
+
+e.g.
+
+staff.data[staff.data$height == “tall”, c(“name”, “age”]
+
+*sp* name   age
+
+2   yann      40
+
+3   gabe      24
+
+
+### Probe elements in a vector to get the **positions** of those meeting certain criteria	
+
+      which(object_name criterion)
+
+e.g.
+
+x <- c(1, 3, 8, 10)
+
+which( x >7)
+
+3, 4
+
+### See if any elements in a dataset meet specific criteria	
+
+      any(object_name criterion)
+
+e.g.
+
+x <- c(1, 3, 8, 10)
+
+any( x > 7)
+
+TRUE
+
+### See if all elements in a dataset meet specific criteria
+
+      all(object_name criterion)
+
+e.g.
+
+x <- c(1, 3, 8, 10)
+
+all( x > 7)
+
+FALSE
+
+
+### Subsetting a column based on the name	
+
+      Object_name[“element_name”]
+If you want to get the values of a whole column based on the column name, you can do this
+
+e.g.
+
+x <- c(1 = “first”, 2 =”second”, 3 =”third”)
+
+x
+
+first  second  third
+
+1       2          3
+
+x[“second”]
+second
+2
+
+### Subsetting rows in a data frame	
+
+      subset(frame_name, condition)
+
+e.g
+
+subset(staff.data, age > 30 )
+
+*sp* name   height   age
+
+1   howie   short    51
+
+2   yann      tall       40
+
+Can combine multiple conditions for subset:
+
+      Subset(frame_name, variable1==condition | variable1==condition)
+
+e.g. 
+
+subset(patient_data, dx==”AD” | dx==”FTD”)
+
+This will get all the column data for the rows where diagnosis is AD or where diagnosis if FTD
+
+### Apply a function to some data according to levels of another variable	
+
+      by(data, factor_variable, function) 
+e.g.
+
+by(my.data$age, my.data$diagnosis, mean)
+
+this command with provide the means for the variable age at each level of diagnosis
+
+### Apply a function to some data specifying the data that goes into the function (or limiting the input)	
+
+      with(data, expresssion) 
+e.g.
+
+with(my.data$diagnosis == “FTD”, mean(my.data$age))
+
+this command with provide the means for the variable age for those with a diagnosis of FTD
+
+### Aggregating data	
+
+    Newobjects <- aggregate(data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
+
+e.g.
+
+means <- aggregate (size.data, by = list(agegroup, sex), FUN = mean, na.rm = TRUE)
+
+This command will aggregate all the numeric data in the dataset called size.data and produce means for each numeric variable grouped according to the agegroup and sex variable (4 means per numeric variable)
 
