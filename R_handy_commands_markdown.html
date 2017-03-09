@@ -972,8 +972,8 @@ latter removes multiple objects</code></pre>
 <p>[1] 1 5</p>
 <p>this last command uses the negative sign to tell R to give the elements in the object, ignoring the specified positions</p>
 </div>
-<div id="get-value-at-specific-position-in-a-matrix" class="section level3">
-<h3>Get value at specific position in a matrix</h3>
+<div id="get-values-at-specific-position-in-a-matrix" class="section level3">
+<h3>Get values at specific position in a matrix</h3>
 <pre><code>  Object_name[row_position, column_position]</code></pre>
 <p>e.g.</p>
 <p>This makes a matrix with two rows:</p>
@@ -981,10 +981,25 @@ latter removes multiple objects</code></pre>
 <p>This gets value at row 2, column 3:</p>
 <p>x[2,3]</p>
 <p>[1] 19</p>
-<p>OR to get a whole row</p>
+<p>OR</p>
+<p>To list all the values in a particular variable in a data frame:</p>
+<pre><code>  frame_name$object_name</code></pre>
+<p>e.g.</p>
+<p>staff.data$height</p>
+<p>[1] “short” “tall” “tall”</p>
+</div>
+<div id="get-a-whole-row" class="section level3">
+<h3>Get a whole row</h3>
+<pre><code>  Object_name(=[rownumber, ])</code></pre>
+<p>e.g.</p>
 <p>x[2, ]</p>
 <p>[1] 10 14 19 22</p>
-<p>OR to get a whole column</p>
+</div>
+<div id="get-a-whole-column" class="section level3">
+<h3>Get a whole column</h3>
+<pre><code>  Object_name(=[ , columnnumber])
+  Object_name(=[ , &quot;columnname&quot;])</code></pre>
+<p>e.g.</p>
 <p>x[ , 4]</p>
 <p>[1] 5 22</p>
 <p>e.g.</p>
@@ -992,12 +1007,12 @@ latter removes multiple objects</code></pre>
 <p>staff.data[3, 2]</p>
 <p>[1] tall</p>
 <p>levels: short tall</p>
-<p>OR</p>
-<p>To list all the values in a particular variable in a data frame:</p>
-<pre><code>  frame_name$object_name</code></pre>
-<p>e.g.</p>
-<p>staff.data$height</p>
-<p>[1] “short” “tall” “tall”</p>
+<p>OR, example using column name</p>
+<p>x &lt;- c(1 = “first”, 2 =”second”, 3 =”third”)</p>
+<p>x</p>
+<p>first second third</p>
+<p>1 2 3</p>
+<p>x[“second”] second 2</p>
 </div>
 <div id="get-values-from-a-matrix-and-keep-the-result-as-a-matrix-instead-of-a-vector" class="section level3">
 <h3>Get values from a matrix and keep the result as a matrix instead of a vector</h3>
@@ -1067,16 +1082,10 @@ latter removes multiple objects</code></pre>
 <p>all( x &gt; 7)</p>
 <p>FALSE</p>
 </div>
-<div id="subsetting-a-column-based-on-the-name" class="section level3">
-<h3>Subsetting a column based on the name</h3>
+<div id="subsetting-one-or-more-columns-based-on-the-name" class="section level3">
+<h3>Subsetting one or more columns based on the name</h3>
 <pre><code>  Object_name[“element_name”]</code></pre>
 <p>If you want to get the values of a whole column based on the column name, you can do this</p>
-<p>e.g.</p>
-<p>x &lt;- c(1 = “first”, 2 =”second”, 3 =”third”)</p>
-<p>x</p>
-<p>first second third</p>
-<p>1 2 3</p>
-<p>x[“second”] second 2</p>
 </div>
 <div id="subsetting-rows-in-a-data-frame" class="section level3">
 <h3>Subsetting rows in a data frame</h3>
@@ -1092,18 +1101,18 @@ latter removes multiple objects</code></pre>
 <p>subset(patient_data, dx==”AD” | dx==”FTD”)</p>
 <p>This will get all the column data for the rows where diagnosis is AD or where diagnosis if FTD</p>
 </div>
-<div id="apply-a-function-to-some-data-according-to-levels-of-another-variable" class="section level3">
-<h3>Apply a function to some data according to levels of another variable</h3>
+<div id="by-function-apply-a-function-to-some-data-according-to-levels-of-another-variable" class="section level3">
+<h3>By function: Apply a function to some data according to levels of another variable</h3>
 <pre><code>  by(data, factor_variable, function) </code></pre>
 <p>e.g.</p>
 <p>by(my.data<span class="math inline">\(age, my.data\)</span>diagnosis, mean)</p>
 <p>this command with provide the means for the variable age at each level of diagnosis</p>
 </div>
-<div id="apply-a-function-to-some-data-specifying-the-data-that-goes-into-the-function-or-limiting-the-input" class="section level3">
-<h3>Apply a function to some data specifying the data that goes into the function (or limiting the input)</h3>
+<div id="with-function-apply-a-function-to-some-data-specifying-the-data-that-goes-into-the-function-or-limiting-the-input" class="section level3">
+<h3>With function: Apply a function to some data specifying the data that goes into the function (or limiting the input)</h3>
 <pre><code>  with(data, expresssion) </code></pre>
 <p>e.g.</p>
-<p>with(my.data<span class="math inline">\(diagnosis == “FTD”, mean(my.data\)</span>age))</p>
+<p>with(mydata<span class="math inline">\(diagnosis==“FTD”, mean(mydata\)</span>age))</p>
 <p>this command with provide the means for the variable age for those with a diagnosis of FTD</p>
 </div>
 <div id="aggregating-data" class="section level3">
@@ -1122,6 +1131,27 @@ OR
 <p>Here, you are getting the mean of all the variables in the dataset gapM, divided according to country. The . means all, the ~ means by.</p>
 <p>agg_gap_country &lt;- aggregate(pop~country, data=gapM, FUN=mean)</p>
 <p>Here, you are doing the same thing, but only for the variable pop</p>
+</div>
+<div id="find-observations-with-missing-data-in-a-variable-of-interest" class="section level3">
+<h3>Find observations with missing data in a variable of interest</h3>
+<pre><code>  is.na(dataset_name$variable)</code></pre>
+<p>or can find lines where the variable of interest is not missing</p>
+<p>!is.na(dataset_name$variable)</p>
+</div>
+<div id="omit-observations-with-missing-data" class="section level3">
+<h3>Omit observations with missing data</h3>
+<pre><code>  na.omit(dataset_name$variable)</code></pre>
+</div>
+<div id="identify-rows-with-na-values-in-any-of-the-variables-in-the-row" class="section level3">
+<h3>Identify rows with NA values in ANY of the variables in the row</h3>
+<pre><code>    complete.cases(dataset_name)</code></pre>
+<p>e.g.</p>
+<p>my.data[complete.cases(my.data), ]</p>
+<p>This command will extract the rows that have complete data in the my.data dataset</p>
+<p>e.g.</p>
+<p>my.data[ ! complete.cases(my.data), ]</p>
+<p>This command will extract the rows that DO NOT have complete data in the my.data dataset</p>
+<p>The complete cases command returns a vector with one line for each line in the data frame, and the value TRUE for those lines that are complete</p>
 </div>
 </div>
 </div>

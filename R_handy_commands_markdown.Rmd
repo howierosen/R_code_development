@@ -1164,7 +1164,7 @@ x [-c(2, 3)]
 
 this last command uses the negative sign to tell R to give the elements in the object, ignoring the specified positions
 
-### Get value at specific position in a matrix	
+### Get values at specific position in a matrix	
 
       Object_name[row_position, column_position]
 
@@ -1180,13 +1180,34 @@ x[2,3]
 
 [1] 19
 
-OR to get a whole row
+OR
+
+To list all the values in a particular variable in a data frame:
+      
+      frame_name$object_name
+
+e.g.
+
+staff.data$height
+
+[1] “short” “tall” “tall”
+
+### Get a whole row
+
+      Object_name(=[rownumber, ])
+
+e.g.
 
 x[2, ]
 
 [1] 10 14 19 22
 
-OR to get a whole column
+### Get a whole column
+
+      Object_name(=[ , columnnumber])
+      Object_name(=[ , "columnname"])
+
+e.g. 
 
 x[ , 4]
 
@@ -1202,17 +1223,19 @@ staff.data[3, 2]
 
 levels: short tall
 
-OR
+OR, example using column name
 
-To list all the values in a particular variable in a data frame:
-      
-      frame_name$object_name
+x <- c(1 = “first”, 2 =”second”, 3 =”third”)
 
-e.g.
+x
 
-staff.data$height
+first  second  third
 
-[1] “short” “tall” “tall”
+1       2          3
+
+x[“second”]
+second
+2
 
 
 ### Get values from a matrix and keep the result as a matrix instead of a vector	
@@ -1328,24 +1351,12 @@ all( x > 7)
 FALSE
 
 
-### Subsetting a column based on the name	
+### Subsetting one or more columns based on the name	
 
       Object_name[“element_name”]
 If you want to get the values of a whole column based on the column name, you can do this
 
-e.g.
 
-x <- c(1 = “first”, 2 =”second”, 3 =”third”)
-
-x
-
-first  second  third
-
-1       2          3
-
-x[“second”]
-second
-2
 
 ### Subsetting rows in a data frame	
 
@@ -1371,7 +1382,7 @@ subset(patient_data, dx==”AD” | dx==”FTD”)
 
 This will get all the column data for the rows where diagnosis is AD or where diagnosis if FTD
 
-### Apply a function to some data according to levels of another variable	
+### By function: Apply a function to some data according to levels of another variable	
 
       by(data, factor_variable, function) 
 e.g.
@@ -1380,12 +1391,12 @@ by(my.data$age, my.data$diagnosis, mean)
 
 this command with provide the means for the variable age at each level of diagnosis
 
-### Apply a function to some data specifying the data that goes into the function (or limiting the input)	
+### With function: Apply a function to some data specifying the data that goes into the function (or limiting the input)	
 
       with(data, expresssion) 
 e.g.
 
-with(my.data$diagnosis == “FTD”, mean(my.data$age))
+with(mydata$diagnosis==“FTD”, mean(mydata$age))
 
 this command with provide the means for the variable age for those with a diagnosis of FTD
 
