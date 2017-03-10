@@ -130,8 +130,8 @@ $(document).ready(function () {
 <p>The most useful to start with is probably</p>
 <p><a href="https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf</a></p>
 </div>
-<div id="created-sample-dataset" class="section level1">
-<h1>Created sample dataset</h1>
+<div id="created-sample-datasets" class="section level1">
+<h1>Created sample datasets</h1>
 <p>Created small sample dataset, saved in file named test.frame.csv</p>
 <p>It looks like this (commands below read it in and display the data):</p>
 <pre class="r"><code>test.frame.local &lt;- read.csv(&quot;test.frame.csv&quot;)
@@ -155,6 +155,16 @@ test.frame.local</code></pre>
 ## 16 5555  65   m  BV     4      60      10
 ## 17 6666  58   f CON     1      60      18
 ## 18 6666  59   f CON     2      55      17</code></pre>
+<p>Also creating sample objects</p>
+<p>one numeric vector called test.numbers</p>
+<pre class="r"><code>test.numbers &lt;- c(2, 10, 30, 70, 90, 110)
+test.numbers</code></pre>
+<pre><code>## [1]   2  10  30  70  90 110</code></pre>
+<p>and the other with strings, a character vector called test.char</p>
+<pre class="r"><code>test.char &lt;- c(&quot;howie&quot;, &quot;yann&quot;, &quot;gabe&quot;, &quot;adam&quot;)
+test.char</code></pre>
+<pre><code>## [1] &quot;howie&quot; &quot;yann&quot;  &quot;gabe&quot;  &quot;adam&quot;</code></pre>
+<p>It looks like this (commands below read it in and display the data):</p>
 </div>
 <div id="general-r-functions" class="section level1">
 <h1>GENERAL R FUNCTIONS</h1>
@@ -178,9 +188,15 @@ test.frame.local</code></pre>
 <h3>Getting Help</h3>
 <pre><code>help(function)</code></pre>
 <p>e.g. help(plot)</p>
-<p>OR ?function e.g. ?plot</p>
-<p>OR Apropos(“function”) Lists all functions with string “function” in the name</p>
-<p>OR Example(function) Gets example of using the function</p>
+<p>OR</p>
+<p>?function</p>
+<p>e.g. ?plot</p>
+<p>OR</p>
+<p>Apropos(“function”)</p>
+<p>Lists all functions with string “function” in the name</p>
+<p>OR</p>
+<p>Example(function)</p>
+<p>Gets example of using the function</p>
 </div>
 <div id="see-current-working-directory" class="section level3">
 <h3>See current working directory</h3>
@@ -217,6 +233,7 @@ test.frame.local</code></pre>
 <pre><code>ls( )
 
 OR
+
 Objects( )  </code></pre>
 <p>ls lists all the objects in the directory, as opposed to list.files or dir, which only list files and other directories</p>
 </div>
@@ -263,12 +280,12 @@ Objects( )  </code></pre>
 </div>
 <div id="import-a-stata-file" class="section level3">
 <h3>Import a stata file</h3>
-<pre><code>Library(foreign)
+<pre><code>library(foreign)
 mydata &lt;- read.dta( “mydata.dta” )</code></pre>
 </div>
 <div id="export-to-a-stata-file" class="section level3">
 <h3>Export to a stata file</h3>
-<pre><code>Library(foreign)
+<pre><code>library(foreign)
 write.dta(mydata,  “path/mydata.dta” )</code></pre>
 </div>
 <div id="make-a-new-file" class="section level3">
@@ -280,16 +297,16 @@ write.dta(mydata,  “path/mydata.dta” )</code></pre>
 </div>
 <div id="check-whether-a-file-exists" class="section level3">
 <h3>Check whether a file exists</h3>
-<pre><code>File.exists(“filename”)</code></pre>
+<pre><code>file.exists(“filename”)</code></pre>
 <p>Useful for programming to make sure a file exists before the program uses it</p>
 </div>
 <div id="rename-a-file" class="section level3">
 <h3>Rename a file</h3>
-<pre><code>File.rename (“old_name”, “new_name”)</code></pre>
+<pre><code>file.rename (“old_name”, “new_name”)</code></pre>
 </div>
 <div id="get-info-on-a-file" class="section level3">
 <h3>Get info on a file</h3>
-<pre><code>File.info(“filename”)</code></pre>
+<pre><code>file.info(“filename”)</code></pre>
 </div>
 </div>
 <div id="saving-and-loading-output" class="section level2">
@@ -332,7 +349,10 @@ detach(frame_name)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>e.g. height [1] short tall tall Levels: short tall</p>
+<p>e.g.</p>
+<p>height</p>
+<p>[1] short tall tall</p>
+<p>Levels: short tall</p>
 </div>
 <div id="save-all-objects-in-current-working-directory" class="section level3">
 <h3>Save all objects in current working directory</h3>
@@ -349,13 +369,13 @@ detach(frame_name)</code></pre>
 <div id="loading-your-recent-commands" class="section level3">
 <h3>Loading your recent commands</h3>
 <pre><code>loadhistory ( file = “myfilename”)</code></pre>
-<p>he default is to save in a file called .Rhistory</p>
+<p>the default is to save in a file called .Rhistory</p>
 </div>
 <div id="direct-output-to-a-specific-locationfile" class="section level3">
 <h3>Direct output to a specific location/file</h3>
-<pre><code>Sink(“myfilename”, append=FALSE, split=FALSE)
+<pre><code>sink(“myfilename”, append=FALSE, split=FALSE)
 
-Sink( ) This latter command returns output to terminal</code></pre>
+sink() ; This latter command returns output to terminal</code></pre>
 </div>
 <div id="direct-graphic-output-to-a-locationfile" class="section level3">
 <h3>Direct graphic output to a location/file</h3>
@@ -399,15 +419,20 @@ Hit save </code></pre>
 <div id="to-write-a-function-that-will-take-a-column-name-as-an-argument" class="section level3">
 <h3>To write a function that will take a column name as an argument</h3>
 <pre><code>Use double square brackets [[ ]] to refer to the column in the function, instead of the $
+
 Have to pass the column name as argument in quotes when you call the function</code></pre>
 <p>e.g.</p>
 <p>function_name &lt;- function(data.frame.name, “column_name”) {</p>
-<p>result_variable &lt;- function( data.frame.name</p>
-<p>[[column_name]][element_number]</p>
+<p>result_variable &lt;- function(data.frame.name [[column_name]][element_number]</p>
 <p>}</p>
 <p>e.g.</p>
-<p>makemean &lt;- function(frame.name, variable) {</p>
-<p>average &lt;- mean(data.frame[[variable]])</p>
+<pre class="r"><code>newmean &lt;- mean(test.frame.local[[&quot;age&quot;]])
+newmean</code></pre>
+<pre><code>## [1] 60.77778</code></pre>
+<p>NOTE: you have to remember to put the name of the column in quotes: &quot; &quot;</p>
+<p>OR, here it is using a function that takes the column name as an argument:</p>
+<p>makemean &lt;- function(frame.name, column) {</p>
+<p>average &lt;- mean(data.frame[[column]])</p>
 <p>}</p>
 <p>if you call this function using the variable age, this function will take the mean of the column labeled age and store it in the object called average.</p>
 <p>Like this: makemean(frame.name, “age”)</p>
@@ -464,8 +489,8 @@ TRUE</code></pre>
 </div>
 <div id="generating-data" class="section level1">
 <h1>GENERATING DATA</h1>
-<div id="generating-objects-and-vectors" class="section level2">
-<h2>Generating Objects and Vectors</h2>
+<div id="making-objects-and-vectors" class="section level2">
+<h2>Making Objects and Vectors</h2>
 <div id="storing-an-object" class="section level3">
 <h3>Storing an object</h3>
 <pre><code>Object_name &lt;- data to be stored</code></pre>
@@ -679,8 +704,8 @@ latter removes multiple objects</code></pre>
 <p>This command will grab 100 values from the vector containing 0 and 1, with a probability of grabbing 0 being 0.3 and the probability of grabbing 1 being 0.7. In this command, you had to say replace = TRUE because you don’t have 100 observations in the vector, so you have to replace the value each time you grab it</p>
 </div>
 </div>
-<div id="matrices-and-data-frames" class="section level2">
-<h2>Matrices and Data Frames</h2>
+<div id="making-matrices-and-data-frames" class="section level2">
+<h2>Making Matrices and Data Frames</h2>
 <div id="separate-vector-into-matrix" class="section level3">
 <h3>Separate vector into matrix</h3>
 <pre><code>  dim(object_name) &lt;- (nu_of_rows, nu_of_columns)</code></pre>
@@ -805,7 +830,76 @@ latter removes multiple objects</code></pre>
 </div>
 <div id="remove-rows-from-a-data-frame" class="section level3">
 <h3>Remove rows from a data frame</h3>
-<pre><code>  Dataset_name &lt;- dataset_name [ -c(row#, row#...),  ]</code></pre>
+<pre><code>  Dataset_name &lt;- dataset_name [ -c(row#, row#...),  ]
+  </code></pre>
+</div>
+<div id="creating-a-list" class="section level3">
+<h3>Creating a list</h3>
+<pre><code>  List_name &lt;- list(object1_name = value, object2_name = value, object3_name = value, …)</code></pre>
+<p>e.g.</p>
+<p>howie.lst &lt;- list(stud.id = 3344, stud.name = “Howie”, stud.scores = c(99, 73, 95, 85)</p>
+<p>howie.lst</p>
+<p>$stud.id</p>
+<p>[1] 3344</p>
+<p>$stud.name</p>
+<p>[1] “Howie”</p>
+<p>$stud.scores</p>
+<p>[1] 99 73 95 85</p>
+<p>A list contains several objects. The objects don’t have to have the same length or mode</p>
+</div>
+<div id="naming-objects-in-a-list" class="section level3">
+<h3>Naming objects in a list</h3>
+<pre><code>  Names(List_name) &lt;- c(“name1”, “name2”, “name3”, etc.)</code></pre>
+<p>e.g.</p>
+<p>names(howie.lst &lt;- c(“id”, “name”, “scores”)</p>
+<p>Howie.lst</p>
+<p>$id</p>
+<p>[1] 3344</p>
+<p>$name</p>
+<p>[1] “Howie”</p>
+<p>$scores</p>
+<p>[1] 99 73 95 85</p>
+</div>
+<div id="extending-a-list-adding-new-objects" class="section level3">
+<h3>Extending a list (adding new objects)</h3>
+<pre><code>  List_name$object_name &lt;- c (value1,  value2, etc.)</code></pre>
+<p>e.g.</p>
+<p>Howie.lst$parents &lt;- (“dora”, “seymour”)</p>
+<p>Howie.lst</p>
+<p>$id</p>
+<p>[1] 3344</p>
+<p>$name</p>
+<p>[1] “Howie”</p>
+<p>$scores</p>
+<p>[1] 99 73 95 85</p>
+<p>$parents</p>
+<p>[1] “dora” “Seymour”</p>
+</div>
+<div id="concatenating-lists" class="section level3">
+<h3>Concatenating lists</h3>
+<pre><code>  New_list &lt;- c(list1, list2)</code></pre>
+<p>e.g.</p>
+<p>list2 &lt;- c(age = 51, sex = “man”)</p>
+<p>new.lst &lt;- c(Howie.lst, list2)</p>
+<p>new.lst</p>
+<p>$id</p>
+<p>[1] 3344</p>
+<p>$name</p>
+<p>[1] “Howie”</p>
+<p>$scores</p>
+<p>[1] 99 73 95 85</p>
+<p>$parents</p>
+<p>[1] “dora” “Seymour”</p>
+<p>$age</p>
+<p>[1] 51</p>
+<p>$sex</p>
+<p>[1] “man”</p>
+</div>
+<div id="unflatten-a-list" class="section level3">
+<h3>Unflatten a list</h3>
+<pre><code>  unlist(listname)  
+  </code></pre>
+<p>All list elements will become elements in a single vector, and be forced to have the same mode (e.g. character, numeric…), and each element will have a name</p>
 </div>
 </div>
 </div>
@@ -931,13 +1025,91 @@ latter removes multiple objects</code></pre>
 <p>For numeric variables, will give mean, median, max, min and 1st and 3rd quartiles</p>
 <p>For character variables, will give counts for each level</p>
 </div>
+<div id="lappy-apply-functions-to-data" class="section level3">
+<h3>lappy: Apply functions to data</h3>
+<pre><code>lapply(dataset_name, function, na.rm = TRUE)</code></pre>
+<p>NOTE: lapply always returns a list, which will have a bunch of elements, each of which corresponds to the element that was evaluated in the original dataset</p>
+<p>e.g.</p>
+<p>means &lt;- lapply(my.data, mean, na.rm = TRUE)</p>
+<p>This command will try to take the mean of every column in the dataset my.data, and save those means in a new list</p>
+<p>Other functions include sd, var, min, max, median, range, and quantile, or any other function</p>
+<p>e.g.</p>
+<p>class_list &lt;- lapply(my.data, class)</p>
+<p>This command will assess the class of each column in the my.data dataset and pass the class values to a list called class_list</p>
+</div>
+<div id="sapply-apply-functions-and-get-the-result-formatted-properly" class="section level3">
+<h3>sapply: Apply functions and get the result formatted properly</h3>
+<pre><code>  sapply(dataset_name, function, na.rm = TRUE)</code></pre>
+<p>NOTE: sapply is like lapply but better because it will return simplify the data into the simplest data structre possible, like a simple vector or matrix if it can</p>
+<p>If using sapply results in a bunch of elements of length 1, it will save them in a vector</p>
+<p>If using sapply results in a bunch of vectors that all have multiple elements and have the same length, it will save them in a matrix.</p>
+<p>If using sapply results in a bunch of vectors that all have multiple elements that are not the same length, it will save the results as a list, which is the same thing that lapply will do</p>
+<p>e.g.</p>
+<p>means &lt;- sapply(my.data, mean, na.rm = TRUE)</p>
+<p>This command will try to take the mean of every column in the dataset my.data, and save those means in a vector. Because the output of mean is numbers, the vector will be numeric</p>
+<p>e.g.</p>
+<p>class_list &lt;- sapply(my.data, class)</p>
+<p>This command will assess the class of each column in the my.data dataset and pass the class values to a vector called class_list. Because the output of class is a string, the vector will be a character vector</p>
+<p>sapply will also make a matrix if the data it brings back is a series of vectors</p>
+<p>e.g.</p>
+<p>maxmin &lt;- sapply(my.data, range)</p>
+<p>This will take the minimum and maximum of the numbers in each column of my.data and save it in a matrix that would be 2 rows by however many columns are in the dataset</p>
+</div>
+<div id="vapply-specify-the-type-of-output-provided-by-apply" class="section level3">
+<h3>vapply: Specify the type of output provided by apply</h3>
+<pre><code>  vapply(dataset_name, function, vector_type)</code></pre>
+<p>e.g.</p>
+<p>vapply(my.data, class, character(1))</p>
+<p>This command will determine the class of each object in my.data and the output is specified as a character vector of length 1.</p>
+<p>Using this function does the same thing as sapply, but it is ‘safer’ than sapply because it will give an error if the output is not in the form you expect. Thus, vaapply is good to use in scripts where you want error messages if things don’t go well. In contrast, sapply will output the result in whatever format it needs to, and you won’t know if it’s not what you expect</p>
+</div>
+<div id="tapply-get-statistics-for-an-object-in-a-list-split-according-to-another-factor-vector" class="section level3">
+<h3>tapply: Get statistics for an object in a list split according to another factor vector</h3>
+<pre><code>  tapply(variable_to_be_assessed, factor_variable, function)</code></pre>
+<p>e.g.</p>
+<p>tapply(my.data<span class="math inline">\(age, mydata\)</span>diagnosis, mean)</p>
+<p>this command with provide the means for the variable age at each level of diagnosis</p>
+</div>
+<div id="extract-value-of-an-element-from-a-list" class="section level3">
+<h3>Extract value of an element from a list</h3>
+<pre><code>  List_name[[list_item_number]]</code></pre>
+<p>e.g.</p>
+<p>howie.lst[[3]]</p>
+<p>$stud.scores [1] 99 73 95 85</p>
+<p>OR</p>
+<p>List_name$object_name</p>
+<p>e.g.</p>
+<p>howie.lst$stud.scores</p>
+<p>[1] 99 73 95 85</p>
+<p>If you just use single brackets, you will just create a new list based on the object you have queried (in this case, the third object). If you want the value of an element, you have to use the double brackets</p>
+</div>
+<div id="make-tables-for-factor-data" class="section level3">
+<h3>Make tables for factor data</h3>
+<pre><code>  table(Object_name)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>table(test.frame.local$sex)</code></pre>
+<pre><code>## 
+##  f  m 
+##  7 11</code></pre>
+<p>you can also use table to cross-tabulate multiple factors for the same cases. For instance if you also have a second factor with age categories for the same people references in x, you can show sex and age in a table</p>
+<p>e.g.</p>
+<pre class="r"><code>table(test.frame.local$sex, test.frame.local$dx)</code></pre>
+<pre><code>##    
+##     BV CON
+##   f  5   2
+##   m  4   7</code></pre>
+</div>
 </div>
 <div id="subsetting-various-ways" class="section level2">
 <h2>Subsetting various ways</h2>
 <div id="get-value-at-a-specific-position-in-a-vector" class="section level3">
 <h3>Get value at a specific position in a vector</h3>
-<pre><code>  Object_name[position]
-  </code></pre>
+<pre><code>  Object_name[position]</code></pre>
+<pre class="r"><code>table(test.frame.local$sex, test.frame.local$dx)</code></pre>
+<pre><code>##    
+##     BV CON
+##   f  5   2
+##   m  4   7</code></pre>
 <p>e.g.</p>
 <p>x &lt;- c(1, 2, 3, 5)</p>
 <p>x [4]</p>

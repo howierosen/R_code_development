@@ -19,7 +19,7 @@ The most useful to start with is probably
 
 https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf
 
-# Created sample dataset
+# Created sample datasets
 
 Created small sample dataset, saved in file named test.frame.csv
 
@@ -30,6 +30,24 @@ test.frame.local <- read.csv("test.frame.csv")
 test.frame.local
 ```
 
+
+Also creating sample objects
+
+one numeric vector called test.numbers
+
+```{r make_vector}
+test.numbers <- c(2, 10, 30, 70, 90, 110)
+test.numbers
+```
+
+and the other with strings, a character vector called test.char
+
+```{r make_char_vector}
+test.char <- c("howie", "yann", "gabe", "adam")
+test.char
+```
+
+It looks like this (commands below read it in and display the data):
 
 # GENERAL R FUNCTIONS
 
@@ -58,15 +76,21 @@ DON’T FORGET to put “ “ around package name, or it will give you error mes
 e.g. help(plot)
     
 OR
+
 ?function
+
 e.g. ?plot
     
 OR
+
 Apropos(“function”)
+
 Lists all functions with string “function” in the name
   
 OR
+
 Example(function)
+
 Gets example of using the function
     
 ### See current working directory
@@ -112,6 +136,7 @@ The path has to be in “quotes”. You can use “..” to indicate one directo
     ls( )
     
     OR
+    
     Objects( )	
     
 ls lists all the objects in the directory, as opposed to list.files or dir, which only list files and other directories
@@ -147,11 +172,11 @@ mydata <- read.csv(“path\datafile.csv”)
 
 This is if you know the file is a csv file
 
-You can read in other types of files if you indicate a different separator, for           instance, for a tab separated file you would do:
+You can read in other types of files if you indicate a different separator, for instance, for a tab separated file you would do:
     
 mydata <- read.table( “path\mydata.tsv” , header = TRUE, sep = “\t”, row.names=“id”)
 
-DON’T FORGET  to use the header and sep arguments and to include the .csv or it won’t     read the file in correctly
+DON’T FORGET  to use the header and sep arguments and to include the .csv or it won’t read the file in correctly
 
 ### Import a .csv file, if you know it’s a .csv file
       
@@ -178,12 +203,12 @@ write.table ( mydata, “path\mydata.csv”, sep = “ \t“ )
 
 ### Import a stata file
 
-    Library(foreign)
+    library(foreign)
     mydata <- read.dta( “mydata.dta” )
 
 ### Export to a stata file
 
-    Library(foreign)
+    library(foreign)
     write.dta(mydata,  “path/mydata.dta” )
 
 
@@ -199,18 +224,18 @@ this will create a file that R will recognize as an R file
 
 ### Check whether a file exists
 
-    File.exists(“filename”)
+    file.exists(“filename”)
 
 Useful for programming to make sure a file exists before the program uses it
 
 ### Rename a file
 
-    File.rename (“old_name”, “new_name”)
+    file.rename (“old_name”, “new_name”)
 
 
 ### Get info on a file	
 
-    File.info(“filename”)
+    file.info(“filename”)
 
 ## Saving and Loading Output
 
@@ -241,11 +266,14 @@ staff.data[age > 30, ]
   name |  height  | age
   -----|----------|-----     
 1 howie|  short   | 51
-2 yann |  tall   | 40
+2 yann |  tall    | 40
 
 e.g.
+
 height
+
 [1] short tall tall
+
 Levels: short tall
 
 ### Save all objects in current working directory	
@@ -268,13 +296,13 @@ The default is to save in a file called .Rhistory
 
     loadhistory ( file = “myfilename”)
 
-he default is to save in a file called .Rhistory
+the default is to save in a file called .Rhistory
 
 ### Direct output to a specific location/file
 
-    Sink(“myfilename”, append=FALSE, split=FALSE)
+    sink(“myfilename”, append=FALSE, split=FALSE)
     
-    Sink( ) This latter command returns output to terminal
+    sink() ; This latter command returns output to terminal
 
 ### Direct graphic output to a location/file	
 
@@ -326,23 +354,31 @@ frame.with.new.column <- function_that_adds_column(frame.without.new.column)
 ### To write a function that will take a column name as an argument	
 
     Use double square brackets [[ ]] to refer to the column in the function, instead of the $
+    
     Have to pass the column name as argument in quotes when you call the function
 
 e.g.
 
 function_name <- function(data.frame.name, “column_name”) {
        
-result_variable <-  function( data.frame.name                          
-
-[[column_name]][element_number]
+result_variable <-  function(data.frame.name                    [[column_name]][element_number]
       
 }
 
 e.g.
 
-makemean <- function(frame.name, variable) {
-     
-average <- mean(data.frame[[variable]])
+```{r makemean}
+newmean <- mean(test.frame.local[["age"]])
+newmean
+```
+
+NOTE: you have to remember to put the name of the column in quotes: " "
+
+OR, here it is using a function that takes the column name as an argument:
+
+makemean <- function(frame.name, column) {
+
+  average <- mean(data.frame[[column]])
 
 }
 
@@ -407,7 +443,7 @@ if you call this function using the variable age, this function will get the sec
 
 # GENERATING DATA
 
-## Generating Objects and Vectors
+## Making Objects and Vectors
 
 ### Storing an object	
 
@@ -745,7 +781,7 @@ Sample(c(0, 1), 100, prob = c(0.3, 0.7), replace = TRUE)
 
 This command will grab 100 values from the vector containing 0 and 1, with a probability of grabbing 0 being 0.3 and the probability of grabbing 1 being 0.7. In this command, you had to say replace = TRUE because you don’t have 100 observations in the vector, so you have to replace the value each time you grab it
 
-## Matrices and Data Frames
+## Making Matrices and Data Frames
 
 ### Separate vector into matrix	
 
@@ -941,6 +977,122 @@ Above command will sort all the data in my.data by the variable mpg in ascending
 ### Remove rows from a data frame	
 
       Dataset_name <- dataset_name [ -c(row#, row#...),  ]
+      
+### Creating a list	
+
+      List_name <- list(object1_name = value, object2_name = value, object3_name = value, …)
+
+e.g.
+
+howie.lst <- list(stud.id = 3344, stud.name = “Howie”, stud.scores = c(99, 73, 95, 85)
+
+howie.lst
+
+$stud.id
+
+[1] 3344
+
+$stud.name
+
+[1] “Howie”
+
+$stud.scores
+
+[1] 99 73 95 85	
+
+A list contains several objects. The objects don’t have to have the same length or mode
+
+### Naming objects in a list	
+
+      Names(List_name) <- c(“name1”, “name2”, “name3”, etc.)
+
+e.g.
+
+names(howie.lst <- c(“id”, “name”, “scores”)
+
+Howie.lst
+
+$id
+
+[1] 3344
+
+$name
+
+[1] “Howie”
+
+$scores
+
+[1] 99 73 95 85
+
+### Extending a list (adding new objects)	
+
+      List_name$object_name <- c (value1,  value2, etc.)
+
+e.g.
+
+Howie.lst$parents <- (“dora”, “seymour”)
+
+Howie.lst
+
+$id
+
+[1] 3344
+
+$name
+
+[1] “Howie”
+
+$scores
+
+[1] 99 73 95 85
+
+$parents
+
+[1] “dora” “Seymour”
+
+
+### Concatenating lists	
+
+      New_list <- c(list1, list2)
+
+e.g.
+
+list2 <- c(age = 51, sex = “man”)
+
+new.lst <- c(Howie.lst, list2)
+
+new.lst
+
+$id
+
+[1] 3344
+
+$name
+
+[1] “Howie”
+
+$scores
+
+[1] 99 73 95 85
+
+$parents
+
+[1] “dora” “Seymour”
+
+$age
+
+[1] 51
+
+$sex
+
+[1] “man”
+
+### Unflatten a list	
+
+      unlist(listname)	
+      
+All list elements will become elements in a single vector, and be forced to have the same mode (e.g. character, numeric…), and each element will have a name
+
 
 # EXAMINING DATA
 
@@ -1097,13 +1249,133 @@ For numeric variables, will give mean, median, max, min and 1st and 3rd quartile
 
 For character variables, will give counts for each level
 
+### lappy: Apply functions to data
+
+    lapply(dataset_name, function, na.rm = TRUE)
+NOTE: lapply always returns a list, which will have a bunch of elements, each of which corresponds to the element that was evaluated in the original dataset
+
+e.g.
+
+means <- lapply(my.data, mean, na.rm = TRUE)
+
+This command will try to take the mean of every column in the dataset my.data, and save those means in a new list
+
+Other functions include sd, var, min, max, median, range, and quantile, or any other function
+
+e.g.
+
+class_list <- lapply(my.data, class)
+
+This command will assess the class of each column in the my.data dataset and pass the class values to a list called class_list
+
+### sapply: Apply functions and get the result formatted properly	
+
+      sapply(dataset_name, function, na.rm = TRUE)
+NOTE: sapply is like lapply but better because it will return simplify the data into the simplest data structre possible, like a simple vector or matrix if it can
+
+If using sapply results in a bunch of elements of length 1, it will save them in a vector
+
+If using sapply results in a bunch of vectors that all have multiple elements and have the same length, it will save them in a matrix.
+
+If using sapply results in a bunch of vectors that all have multiple elements that are not the same length, it will save the results as a list, which is the same thing that lapply will do
+
+e.g.
+
+means <- sapply(my.data, mean, na.rm = TRUE)
+
+This command will try to take the mean of every column in the dataset my.data, and save those means in a vector. Because the output of mean is numbers, the vector will be numeric
+
+e.g.
+
+class_list <- sapply(my.data, class)
+
+This command will assess the class of each column in the my.data dataset and pass the class values to a vector called class_list. Because the output of class is a string, the vector will be a character vector
+
+sapply will also make a matrix if the data it brings back is a series of vectors
+
+e.g.
+
+maxmin <- sapply(my.data, range)
+
+This will take the minimum and maximum of the numbers in each column of my.data and save it in a matrix that would be 2 rows by however many columns are in the dataset
+
+### vapply: Specify the type of output provided by apply	
+
+      vapply(dataset_name, function, vector_type)
+
+e.g.
+
+vapply(my.data, class, character(1))
+
+This command will determine the class of each object in my.data and the output is specified as a character vector of length 1.	
+
+Using this function does the same thing as sapply, but it is ‘safer’ than sapply because it will give an error if the output is not in the form you expect. Thus, vaapply is good to use in scripts where you want error messages if things don't go well. In contrast, sapply will output the result in whatever format it needs to, and you won’t know if it’s not what you expect
+
+### tapply: Get statistics for an object in a list split according to another factor vector	
+
+      tapply(variable_to_be_assessed, factor_variable, function)
+
+e.g.
+
+tapply(my.data$age, mydata$diagnosis, mean)
+
+this command with provide the means for the variable age at each level of diagnosis
+
+### Extract value of an element from a list 	
+
+      List_name[[list_item_number]]
+
+e.g.
+
+howie.lst[[3]]
+
+$stud.scores
+[1] 99 73 95 85
+
+OR
+
+List_name$object_name
+
+e.g.
+
+howie.lst$stud.scores
+
+[1] 99 73 95 85	
+
+If you just use single brackets, you will just create a new list based on the object you have queried (in this case, the third object). If you want the value of an element, you have to use the double brackets
+
+### Make tables for factor data	
+
+      table(Object_name)
+
+e.g.
+
+```{r count_sex}
+
+table(test.frame.local$sex)
+```
+
+
+you can also use table to cross-tabulate multiple factors for the same cases. For instance if you also have a second factor with age categories for the same people references in x, you can show sex and age in a table
+
+e.g.
+
+```{r count_sex_by_dx}
+
+table(test.frame.local$sex, test.frame.local$dx)
+```
+
 
 ## Subsetting various ways
 
 ### Get value at a specific position in a vector
 
       Object_name[position]
-      
+
+```{r get_dx}
+
+table(test.frame.local$sex, test.frame.local$dx)
+```      
 e.g.
 
 x <- c(1, 2, 3, 5)
