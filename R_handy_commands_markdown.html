@@ -1272,9 +1272,12 @@ latter removes multiple objects</code></pre>
 <h3>Probe elements in a vector to get the <strong>positions</strong> of those meeting certain criteria</h3>
 <pre><code>  which(object_name criterion)</code></pre>
 <p>e.g.</p>
-<p>x &lt;- c(1, 3, 8, 10)</p>
-<p>which( x &gt;7)</p>
-<p>3, 4</p>
+<pre class="r"><code>test.numbers</code></pre>
+<pre><code>## [1]   2  10  30  70  90 110</code></pre>
+<pre class="r"><code>which(test.numbers &gt; 10)</code></pre>
+<pre><code>## [1] 3 4 5 6</code></pre>
+<pre class="r"><code>which(test.char == &quot;gabe&quot;)</code></pre>
+<pre><code>## [1] 3</code></pre>
 </div>
 <div id="see-if-any-elements-in-a-dataset-meet-specific-criteria" class="section level3">
 <h3>See if any elements in a dataset meet specific criteria</h3>
@@ -1296,34 +1299,61 @@ latter removes multiple objects</code></pre>
 <h3>Subsetting one or more columns based on the name</h3>
 <pre><code>  Object_name[“element_name”]</code></pre>
 <p>If you want to get the values of a whole column based on the column name, you can do this</p>
+<pre class="r"><code>test.frame.local[c(&quot;PIDN&quot;,&quot;age&quot;)]</code></pre>
+<pre><code>##    PIDN age
+## 1  1111  55
+## 2  1111  56
+## 3  1111  57
+## 4  1111  58
+## 5  2222  60
+## 6  2222  61
+## 7  2222  62
+## 8  3333  66
+## 9  3333  67
+## 10 3333  68
+## 11 4444  56
+## 12 4444  57
+## 13 5555  62
+## 14 5555  63
+## 15 5555  64
+## 16 5555  65
+## 17 6666  58
+## 18 6666  59</code></pre>
 </div>
 <div id="subsetting-rows-in-a-data-frame" class="section level3">
 <h3>Subsetting rows in a data frame</h3>
-<pre><code>  subset(frame_name, condition)</code></pre>
+<pre><code>  subset(frame_name, condition)
+  
+  OR, to combine multiple conditions, using |, which is &quot;or&quot;:
+  
+  Subset(frame_name, variable1==condition | variable1==condition)</code></pre>
 <p>e.g</p>
-<p>subset(staff.data, age &gt; 30 )</p>
-<p><em>sp</em> name height age</p>
-<p>1 howie short 51</p>
-<p>2 yann tall 40</p>
-<p>Can combine multiple conditions for subset:</p>
-<pre><code>  Subset(frame_name, variable1==condition | variable1==condition)</code></pre>
-<p>e.g.</p>
-<p>subset(patient_data, dx==”AD” | dx==”FTD”)</p>
-<p>This will get all the column data for the rows where diagnosis is AD or where diagnosis if FTD</p>
+<pre class="r"><code>subset(test.frame.local, test.frame.local$PIDN==4444 |  test.frame.local$PIDN==6666)</code></pre>
+<pre><code>##    PIDN age sex  dx visit volume1 volume2
+## 11 4444  56   f  BV     1      70      19
+## 12 4444  57   f  BV     2      65      14
+## 17 6666  58   f CON     1      60      18
+## 18 6666  59   f CON     2      55      17</code></pre>
 </div>
 <div id="by-function-apply-a-function-to-some-data-according-to-levels-of-another-variable" class="section level3">
 <h3>By function: Apply a function to some data according to levels of another variable</h3>
 <pre><code>  by(data, factor_variable, function) </code></pre>
 <p>e.g.</p>
-<p>by(my.data<span class="math inline">\(age, my.data\)</span>diagnosis, mean)</p>
-<p>this command with provide the means for the variable age at each level of diagnosis</p>
+<pre class="r"><code>by(test.frame.local$age, test.frame.local$dx, mean)</code></pre>
+<pre><code>## test.frame.local$dx: BV
+## [1] 61.11111
+## -------------------------------------------------------- 
+## test.frame.local$dx: CON
+## [1] 60.44444</code></pre>
 </div>
 <div id="with-function-apply-a-function-to-some-data-specifying-the-data-that-goes-into-the-function-or-limiting-the-input" class="section level3">
 <h3>With function: Apply a function to some data specifying the data that goes into the function (or limiting the input)</h3>
 <pre><code>  with(data, expresssion) </code></pre>
 <p>e.g.</p>
-<p>with(mydata<span class="math inline">\(diagnosis==“FTD”, mean(mydata\)</span>age))</p>
+<pre class="r"><code>with(test.frame.local[test.frame.local$dx==&quot;BV&quot;, ], mean(test.frame.local$age))</code></pre>
+<pre><code>## [1] 60.77778</code></pre>
 <p>this command with provide the means for the variable age for those with a diagnosis of FTD</p>
+<p>the “with” command sets the environment in which to do the operation. Here, we are telling it what data frame to use, then within the square brackets we are specifying the dataset to create in which to run the analysis, meaning a new dataset made up of all columns for the rows where the dx variable has a value of BV</p>
 </div>
 <div id="aggregating-data" class="section level3">
 <h3>Aggregating data</h3>

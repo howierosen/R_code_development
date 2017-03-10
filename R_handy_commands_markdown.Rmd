@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -1604,11 +1604,14 @@ test.frame.local[test.frame.local$dx == "BV", c("age", "volume1")]
 
 e.g.
 
-x <- c(1, 3, 8, 10)
+```{r get_row_psn_BV}
 
-which( x >7)
+test.numbers
+which(test.numbers > 10)
+which(test.char == "gabe")
 
-3, 4
+```
+
 
 ### See if any elements in a dataset meet specific criteria	
 
@@ -1640,49 +1643,56 @@ FALSE
       Object_name[“element_name”]
 If you want to get the values of a whole column based on the column name, you can do this
 
+```{r get_col}
 
+test.frame.local[c("PIDN","age")]
+
+```
 
 ### Subsetting rows in a data frame	
 
       subset(frame_name, condition)
+      
+      OR, to combine multiple conditions, using |, which is "or":
+      
+      Subset(frame_name, variable1==condition | variable1==condition)
 
 e.g
 
-subset(staff.data, age > 30 )
+```{r get_PIDNs}
 
-*sp* name   height   age
+subset(test.frame.local, test.frame.local$PIDN==4444 |  test.frame.local$PIDN==6666)
 
-1   howie   short    51
+```
 
-2   yann      tall       40
-
-Can combine multiple conditions for subset:
-
-      Subset(frame_name, variable1==condition | variable1==condition)
-
-e.g. 
-
-subset(patient_data, dx==”AD” | dx==”FTD”)
-
-This will get all the column data for the rows where diagnosis is AD or where diagnosis if FTD
 
 ### By function: Apply a function to some data according to levels of another variable	
 
       by(data, factor_variable, function) 
 e.g.
 
-by(my.data$age, my.data$diagnosis, mean)
+```{r mean_age_by_dx}
 
-this command with provide the means for the variable age at each level of diagnosis
+by(test.frame.local$age, test.frame.local$dx, mean)
+
+```
+
 
 ### With function: Apply a function to some data specifying the data that goes into the function (or limiting the input)	
 
       with(data, expresssion) 
 e.g.
 
-with(mydata$diagnosis==“FTD”, mean(mydata$age))
+```{r mean_age_bv_only}
+
+with(test.frame.local[test.frame.local$dx=="BV", ], mean(test.frame.local$age))
+
+
+```
 
 this command with provide the means for the variable age for those with a diagnosis of FTD
+
+the "with" command sets the environment in which to do the operation. Here, we are telling it what data frame to use, then within the square brackets we are specifying the dataset to create in which to run the analysis, meaning a new dataset made up of all columns for the rows where the dx variable has a value of BV
 
 ### Aggregating data	
 
