@@ -1105,130 +1105,168 @@ latter removes multiple objects</code></pre>
 <div id="get-value-at-a-specific-position-in-a-vector" class="section level3">
 <h3>Get value at a specific position in a vector</h3>
 <pre><code>  Object_name[position]</code></pre>
-<pre class="r"><code>table(test.frame.local$sex, test.frame.local$dx)</code></pre>
-<pre><code>##    
-##     BV CON
-##   f  5   2
-##   m  4   7</code></pre>
-<p>e.g.</p>
-<p>x &lt;- c(1, 2, 3, 5)</p>
-<p>x [4]</p>
-<p>[1] 5</p>
+<pre class="r"><code>test.char[2]</code></pre>
+<pre><code>## [1] &quot;yann&quot;</code></pre>
 </div>
 <div id="get-values-at-multiple-positions-in-a-vector" class="section level3">
 <h3>Get values at multiple positions in a vector</h3>
 <pre><code>  Object_name[c(position, position, …)]</code></pre>
 <p>e.g.</p>
-<p>x &lt;- c(1, 2, 3, 5)</p>
-<p>x [ c(1,4) ]</p>
-<p>[1] 1 5</p>
+<pre class="r"><code>test.char[c(2,4)]</code></pre>
+<pre><code>## [1] &quot;yann&quot; &quot;adam&quot;</code></pre>
 <p>You have to combine the positions into a vector or it will think you are looking at a matrix and get confused</p>
 <p>OR</p>
 <pre><code>  Object_name[c(sequence)]</code></pre>
 <p>e.g.</p>
-<p>x &lt;- c(1, 2, 3, 5)</p>
-<p>x [1:3]</p>
-<p>[1] 1 2 3</p>
+<pre class="r"><code>test.char[c(2:4)]</code></pre>
+<pre><code>## [1] &quot;yann&quot; &quot;gabe&quot; &quot;adam&quot;</code></pre>
 <p>OR, designate a position to ignore</p>
 <pre><code>  Object_name[-position_to_ignore]
   </code></pre>
-<p>e.g.</p>
-<p>x &lt;- c(1, 2, 3, 5)</p>
-<p>x [-3]</p>
-<p>[1] 1 2 5</p>
+<pre class="r"><code>test.char[-4]</code></pre>
+<pre><code>## [1] &quot;howie&quot; &quot;yann&quot;  &quot;gabe&quot;</code></pre>
 <p>OR, designate multiple positions to ignore</p>
 <pre><code>  Object_name[-c(position, position, …)]</code></pre>
-<p>e.g.</p>
-<p>x &lt;- c(1, 2, 3, 5)</p>
-<p>x [-c(2, 3)]</p>
-<p>[1] 1 5</p>
+<pre class="r"><code>test.char[-c(2,4)]</code></pre>
+<pre><code>## [1] &quot;howie&quot; &quot;gabe&quot;</code></pre>
 <p>this last command uses the negative sign to tell R to give the elements in the object, ignoring the specified positions</p>
 </div>
 <div id="get-values-at-specific-position-in-a-matrix" class="section level3">
 <h3>Get values at specific position in a matrix</h3>
 <pre><code>  Object_name[row_position, column_position]</code></pre>
 <p>e.g.</p>
-<p>This makes a matrix with two rows:</p>
-<p>x &lt;- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))</p>
-<p>This gets value at row 2, column 3:</p>
-<p>x[2,3]</p>
-<p>[1] 19</p>
+<pre class="r"><code>test.frame.local[2,4]</code></pre>
+<pre><code>## [1] CON
+## Levels: BV CON</code></pre>
 <p>OR</p>
 <p>To list all the values in a particular variable in a data frame:</p>
-<pre><code>  frame_name$object_name</code></pre>
+<pre><code>  frame_name$object_name
+  
+  OR
+  
+  frame_name[[&quot;object_name&quot;]]</code></pre>
+<p>When using the double square brackets, you have to put the name in quotes, when using the $ you don’t</p>
 <p>e.g.</p>
-<p>staff.data$height</p>
-<p>[1] “short” “tall” “tall”</p>
+<pre class="r"><code>test.frame.local$dx</code></pre>
+<pre><code>##  [1] CON CON CON CON BV  BV  BV  CON CON CON BV  BV  BV  BV  BV  BV  CON
+## [18] CON
+## Levels: BV CON</code></pre>
+<p>OR</p>
+<pre class="r"><code>test.frame.local[[&quot;dx&quot;]]</code></pre>
+<pre><code>##  [1] CON CON CON CON BV  BV  BV  CON CON CON BV  BV  BV  BV  BV  BV  CON
+## [18] CON
+## Levels: BV CON</code></pre>
 </div>
 <div id="get-a-whole-row" class="section level3">
 <h3>Get a whole row</h3>
-<pre><code>  Object_name(=[rownumber, ])</code></pre>
+<pre><code>  Object_name[rownumber, ]</code></pre>
 <p>e.g.</p>
-<p>x[2, ]</p>
-<p>[1] 10 14 19 22</p>
+<pre class="r"><code>test.frame.local[3,]</code></pre>
+<pre><code>##   PIDN age sex  dx visit volume1 volume2
+## 3 1111  57   m CON     3      80      10</code></pre>
+<p>OR, get multiple rows</p>
+<p>e.g.</p>
+<pre class="r"><code>test.frame.local[2:3, ]</code></pre>
+<pre><code>##   PIDN age sex  dx visit volume1 volume2
+## 2 1111  56   m CON     2      90      11
+## 3 1111  57   m CON     3      80      10</code></pre>
 </div>
 <div id="get-a-whole-column" class="section level3">
 <h3>Get a whole column</h3>
-<pre><code>  Object_name(=[ , columnnumber])
-  Object_name(=[ , &quot;columnname&quot;])</code></pre>
+<pre><code>  Object_name[ , columnnumber]
+  Object_name[ , &quot;columnname&quot;]</code></pre>
 <p>e.g.</p>
-<p>x[ , 4]</p>
-<p>[1] 5 22</p>
+<pre class="r"><code>test.frame.local[,2]</code></pre>
+<pre><code>##  [1] 55 56 57 58 60 61 62 66 67 68 56 57 62 63 64 65 58 59</code></pre>
+<p>OR, get multiple columns</p>
 <p>e.g.</p>
-<p>OR, to look at a data frame with a column with string data:</p>
-<p>staff.data[3, 2]</p>
-<p>[1] tall</p>
-<p>levels: short tall</p>
-<p>OR, example using column name</p>
-<p>x &lt;- c(1 = “first”, 2 =”second”, 3 =”third”)</p>
-<p>x</p>
-<p>first second third</p>
-<p>1 2 3</p>
-<p>x[“second”] second 2</p>
+<pre class="r"><code>test.frame.local[,2:4]</code></pre>
+<pre><code>##    age sex  dx
+## 1   55   m CON
+## 2   56   m CON
+## 3   57   m CON
+## 4   58   m CON
+## 5   60   f  BV
+## 6   61   f  BV
+## 7   62   f  BV
+## 8   66   m CON
+## 9   67   m CON
+## 10  68   m CON
+## 11  56   f  BV
+## 12  57   f  BV
+## 13  62   m  BV
+## 14  63   m  BV
+## 15  64   m  BV
+## 16  65   m  BV
+## 17  58   f CON
+## 18  59   f CON</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>test.frame.local[,&quot;age&quot;]</code></pre>
+<pre><code>##  [1] 55 56 57 58 60 61 62 66 67 68 56 57 62 63 64 65 58 59</code></pre>
 </div>
 <div id="get-values-from-a-matrix-and-keep-the-result-as-a-matrix-instead-of-a-vector" class="section level3">
 <h3>Get values from a matrix and keep the result as a matrix instead of a vector</h3>
 <pre><code>Object_name[row_position, column_position, drop = FALSE]</code></pre>
-<p>e.g.</p>
-<p>x &lt;- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))</p>
-<p>x[2, , drop = FALSE]</p>
-<p><em>spacerrr</em> [ , 1] [ ,2] [ ,3] [ ,4]</p>
-<p>[1, ] 10 14 19 22</p>
 <p>If you do this command and do not include the drop =FALSE parameter, R would just make a vector, not a matrix because the result would have just one row of values</p>
 </div>
 <div id="identifying-elements-that-meet-specific-criteria" class="section level3">
 <h3>Identifying elements that meet specific criteria</h3>
 <pre><code>  Object_name[test]</code></pre>
 <p>e.g.</p>
-<p>x &lt;- c(1, 2, 3, 5)</p>
-<p>x [ x&gt;3 ]</p>
-<p>[1] 5</p>
-<p>this command gave us the element in object x that was greater than 3</p>
+<pre class="r"><code>test.numbers</code></pre>
+<pre><code>## [1]   2  10  30  70  90 110</code></pre>
+<pre class="r"><code>test.numbers[test.numbers&gt;10]</code></pre>
+<pre><code>## [1]  30  70  90 110</code></pre>
+<p>this command gave us the elements in object test.numbers that was greater than 3</p>
 </div>
 <div id="querying-data-frame-using-conditions" class="section level3">
 <h3>Querying data frame using conditions</h3>
 <pre><code>Frame_name[frame_name$variable_name condition]</code></pre>
 <p>e.g.</p>
-<p>staff.data[staff.data$height == “tall”]</p>
-<p><em>sp</em> name height age</p>
-<p>2 yann tall 40</p>
-<p>3 gabe tall 24</p>
-<p>Another example</p>
+<p>To get all columns where teh row value for age is more than 60</p>
+<pre class="r"><code>test.frame.local[test.frame.local$age &lt; 60, ]</code></pre>
+<pre><code>##    PIDN age sex  dx visit volume1 volume2
+## 1  1111  55   m CON     1     100      15
+## 2  1111  56   m CON     2      90      11
+## 3  1111  57   m CON     3      80      10
+## 4  1111  58   m CON     4      70       9
+## 11 4444  56   f  BV     1      70      19
+## 12 4444  57   f  BV     2      65      14
+## 17 6666  58   f CON     1      60      18
+## 18 6666  59   f CON     2      55      17</code></pre>
+<p>OR</p>
 <p>e.g.</p>
-<p>staff.data[staff.data$age &gt; 30, ]</p>
-<p><em>sp</em> name height age</p>
-<p>1 howie short 51</p>
-<p>2 yann tall 40</p>
-<p>Another example</p>
+<p>To get all columns where the row value for dx is BV</p>
+<pre class="r"><code>test.frame.local[test.frame.local$dx == &quot;BV&quot;, ]</code></pre>
+<pre><code>##    PIDN age sex dx visit volume1 volume2
+## 5  2222  60   f BV     1      90      18
+## 6  2222  61   f BV     2      85      19
+## 7  2222  62   f BV     3      75      17
+## 11 4444  56   f BV     1      70      19
+## 12 4444  57   f BV     2      65      14
+## 13 5555  62   m BV     1      70      15
+## 14 5555  63   m BV     2      65      12
+## 15 5555  64   m BV     3      60      11
+## 16 5555  65   m BV     4      60      10</code></pre>
+<p>OR</p>
 <p>e.g.</p>
-<p>staff.data[staff.data$height == “tall”, “name”]</p>
-<p>[1] “yann” “gabe”</p>
-<p>Another example</p>
+<p>OR</p>
 <p>e.g.</p>
-<p>staff.data[staff.data$height == “tall”, c(“name”, “age”]</p>
-<p><em>sp</em> name age</p>
-<p>2 yann 40</p>
-<p>3 gabe 24</p>
+<p>To get only the age for those where the dx is BV</p>
+<pre class="r"><code>test.frame.local[test.frame.local$dx == &quot;BV&quot;, &quot;age&quot;]</code></pre>
+<pre><code>## [1] 60 61 62 56 57 62 63 64 65</code></pre>
+<p>To get only the age and volume1 value for those where the dx is BV</p>
+<pre class="r"><code>test.frame.local[test.frame.local$dx == &quot;BV&quot;, c(&quot;age&quot;, &quot;volume1&quot;)]</code></pre>
+<pre><code>##    age volume1
+## 5   60      90
+## 6   61      85
+## 7   62      75
+## 11  56      70
+## 12  57      65
+## 13  62      70
+## 14  63      65
+## 15  64      60
+## 16  65      60</code></pre>
 </div>
 <div id="probe-elements-in-a-vector-to-get-the-positions-of-those-meeting-certain-criteria" class="section level3">
 <h3>Probe elements in a vector to get the <strong>positions</strong> of those meeting certain criteria</h3>

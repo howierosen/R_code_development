@@ -1353,6 +1353,7 @@ e.g.
 ```{r count_sex}
 
 table(test.frame.local$sex)
+
 ```
 
 
@@ -1363,6 +1364,7 @@ e.g.
 ```{r count_sex_by_dx}
 
 table(test.frame.local$sex, test.frame.local$dx)
+
 ```
 
 
@@ -1372,18 +1374,12 @@ table(test.frame.local$sex, test.frame.local$dx)
 
       Object_name[position]
 
-```{r get_dx}
+```{r get_name}
 
-table(test.frame.local$sex, test.frame.local$dx)
+test.char[2]
+
 ```      
-e.g.
 
-x <- c(1, 2, 3, 5)
-
-x [4]
-
-[1] 5
-    
 
 ### Get values at multiple positions in a vector	
 
@@ -1391,11 +1387,11 @@ x [4]
 
 e.g.
 
-x <- c(1, 2, 3, 5)
+```{r get_names}
 
-x [ c(1,4) ]
+test.char[c(2,4)]
 
-[1] 1 5
+```   
 
 You have to combine the positions into a vector or it will think you are looking at a matrix and get confused
 
@@ -1404,35 +1400,31 @@ OR
       Object_name[c(sequence)]
 e.g.
 
-x <- c(1, 2, 3, 5)
+```{r get_some_names}
 
-x [1:3]
+test.char[c(2:4)]
 
-[1] 1 2 3
+``` 
 
 OR, designate a position to ignore
 
       Object_name[-position_to_ignore]
       
-e.g.
+```{r leave_name_out}
 
-x <- c(1, 2, 3, 5)
+test.char[-4]
 
-x [-3]
-
-[1] 1 2 5
+``` 
 
 OR, designate multiple positions to ignore
 
       Object_name[-c(position, position, …)]
 
-e.g.
+```{r leave_names_out}
 
-x <- c(1, 2, 3, 5)
+test.char[-c(2,4)]
 
-x [-c(2, 3)]
-
-[1] 1 5
+``` 
 
 this last command uses the negative sign to tell R to give the elements in the object, ignoring the specified positions
 
@@ -1442,88 +1434,100 @@ this last command uses the negative sign to tell R to give the elements in the o
 
 e.g.
 
-This makes a matrix with two rows:
+```{r get_dx}
 
-x <- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))
+test.frame.local[2,4]
 
-This gets value at row 2, column 3:
-
-x[2,3]
-
-[1] 19
+``` 
 
 OR
 
 To list all the values in a particular variable in a data frame:
       
       frame_name$object_name
+      
+      OR
+      
+      frame_name[["object_name"]]
+When using the double square brackets, you have to put the name in quotes, when using the $ you don't
 
 e.g.
 
-staff.data$height
+```{r list_dxs}
 
-[1] “short” “tall” “tall”
+test.frame.local$dx
+
+```
+
+OR
+
+```{r list_dxs_square}
+
+test.frame.local[["dx"]]
+
+```
 
 ### Get a whole row
 
-      Object_name(=[rownumber, ])
+      Object_name[rownumber, ]
 
 e.g.
 
-x[2, ]
+```{r show_pidn}
 
-[1] 10 14 19 22
+test.frame.local[3,]
+
+```
+
+
+OR, get multiple rows
+
+e.g.
+
+```{r show_pidns}
+
+test.frame.local[2:3, ]
+
+```
 
 ### Get a whole column
 
-      Object_name(=[ , columnnumber])
-      Object_name(=[ , "columnname"])
+      Object_name[ , columnnumber]
+      Object_name[ , "columnname"]
 
 e.g. 
 
-x[ , 4]
+```{r show_ages}
 
-[1] 5 22
+test.frame.local[,2]
+
+```
+
+OR, get multiple columns
 
 e.g.
 
-OR, to look at a data frame with a column with string data:
+```{r show_multiple_features}
 
-staff.data[3, 2]
+test.frame.local[,2:4]
 
-[1] tall
+```
 
-levels: short tall
+e.g.
 
-OR, example using column name
+```{r show_ages2}
 
-x <- c(1 = “first”, 2 =”second”, 3 =”third”)
+test.frame.local[,"age"]
 
-x
+```
 
-first  second  third
-
-1       2          3
-
-x[“second”]
-second
-2
 
 
 ### Get values from a matrix and keep the result as a matrix instead of a vector	
 
     Object_name[row_position, column_position, drop = FALSE]
 
-e.g.
 
-x <- matrix (c(1, 2, 3, 5, 10, 14, 19, 22), 2, 4, byrow = TRUE))
-
-
-x[2,  , drop = FALSE]
-
-*spacerrr* [ , 1]  [  ,2]   [  ,3]   [  ,4]
-
-[1, ]       10     14      19       22
 
 If you do this command and do not include the drop =FALSE parameter, R would just make a vector, not a matrix because the result would have just one row of values
 
@@ -1532,58 +1536,66 @@ If you do this command and do not include the drop =FALSE parameter, R would jus
       Object_name[test]
 e.g.
 
-x <- c(1, 2, 3, 5)
+```{r get_nums_gt_10}
 
-x [ x>3 ]
+test.numbers
+test.numbers[test.numbers>10]
 
-[1] 5
+```
 
-this command gave us the element in object x that was greater than 3
+this command gave us the elements in object test.numbers that was greater than 3
 
 ### Querying data frame using conditions	
 
     Frame_name[frame_name$variable_name condition]
-e.g.
 
-staff.data[staff.data$height == “tall”]
+e.g. 
 
-*sp*  name   height   age
+To get all columns where teh row value for age is more than 60
 
-2   yann      tall       40
+```{r get_age_gt_70}
 
-3   gabe      tall        24
+test.frame.local[test.frame.local$age < 60, ]
 
-Another example
+```
 
-e.g.
-
-staff.data[staff.data$age > 30, ]
-
-*sp*  name   height   age
-
-1   howie   short    51
-
-2   yann      tall       40
-
-Another example
+OR
 
 e.g.
 
-staff.data[staff.data$height == “tall”, “name”]
+To get all columns where the row value for dx is BV
 
-[1] “yann” “gabe”
+```{r get_dx_BV}
 
-Another example
+test.frame.local[test.frame.local$dx == "BV", ]
+
+```
+
+
+OR
 
 e.g.
 
-staff.data[staff.data$height == “tall”, c(“name”, “age”]
+OR
 
-*sp* name   age
+e.g.
 
-2   yann      40
+To get only the age for those where the dx is BV
 
-3   gabe      24
+```{r get_age_dx_BV}
+
+test.frame.local[test.frame.local$dx == "BV", "age"]
+
+```
+
+
+To get only the age and volume1 value for those where the dx is BV
+
+```{r get_age_vol_dx_BV}
+
+test.frame.local[test.frame.local$dx == "BV", c("age", "volume1")]
+
+```
 
 
 ### Probe elements in a vector to get the **positions** of those meeting certain criteria	
