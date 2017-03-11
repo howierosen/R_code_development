@@ -1030,12 +1030,96 @@ latter removes multiple objects</code></pre>
 <pre><code>lapply(dataset_name, function, na.rm = TRUE)</code></pre>
 <p>NOTE: lapply always returns a list, which will have a bunch of elements, each of which corresponds to the element that was evaluated in the original dataset</p>
 <p>e.g.</p>
-<p>means &lt;- lapply(my.data, mean, na.rm = TRUE)</p>
-<p>This command will try to take the mean of every column in the dataset my.data, and save those means in a new list</p>
+<pre class="r"><code>lapply(test.frame.local, mean)</code></pre>
+<pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA
+
+## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA</code></pre>
+<pre><code>## $PIDN
+## [1] 3641.611
+## 
+## $age
+## [1] 60.77778
+## 
+## $sex
+## [1] NA
+## 
+## $dx
+## [1] NA
+## 
+## $visit
+## [1] 2.111111
+## 
+## $volume1
+## [1] 73.72222
+## 
+## $volume2
+## [1] 15.38889</code></pre>
+<p>This command will try to take the mean of every column in the dataset. Note it gives warnings for the character variables, cause you can’t get a mean.</p>
+<p>NOTE that apply wants to work on each element in a vector, so if you give it only one column out of the data frame, it will take the mean for every value in the column separately, like this:</p>
+<pre class="r"><code>lapply(test.frame.local$age, mean)</code></pre>
+<pre><code>## [[1]]
+## [1] 55
+## 
+## [[2]]
+## [1] 56
+## 
+## [[3]]
+## [1] 57
+## 
+## [[4]]
+## [1] 58
+## 
+## [[5]]
+## [1] 60
+## 
+## [[6]]
+## [1] 61
+## 
+## [[7]]
+## [1] 62
+## 
+## [[8]]
+## [1] 66
+## 
+## [[9]]
+## [1] 67
+## 
+## [[10]]
+## [1] 68
+## 
+## [[11]]
+## [1] 56
+## 
+## [[12]]
+## [1] 57
+## 
+## [[13]]
+## [1] 62
+## 
+## [[14]]
+## [1] 63
+## 
+## [[15]]
+## [1] 64
+## 
+## [[16]]
+## [1] 65
+## 
+## [[17]]
+## [1] 58
+## 
+## [[18]]
+## [1] 59</code></pre>
+<p>BUT, you can subset a couple of columns and do what you want, like this:</p>
+<pre class="r"><code>lapply(test.frame.local[c(&quot;age&quot;, &quot;volume1&quot;)], mean)</code></pre>
+<pre><code>## $age
+## [1] 60.77778
+## 
+## $volume1
+## [1] 73.72222</code></pre>
 <p>Other functions include sd, var, min, max, median, range, and quantile, or any other function</p>
-<p>e.g.</p>
-<p>class_list &lt;- lapply(my.data, class)</p>
-<p>This command will assess the class of each column in the my.data dataset and pass the class values to a list called class_list</p>
 </div>
 <div id="sapply-apply-functions-and-get-the-result-formatted-properly" class="section level3">
 <h3>sapply: Apply functions and get the result formatted properly</h3>
@@ -1099,12 +1183,82 @@ latter removes multiple objects</code></pre>
 ##   f  5   2
 ##   m  4   7</code></pre>
 </div>
+<div id="getting-frequencies-from-cross-tabulated-data" class="section level3">
+<h3>Getting frequencies from cross-tabulated data</h3>
+<p>First put the table in an object</p>
+<pre><code>  prop.table(table_object_name, dimension_number)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code># first put the data into a table
+sex_table &lt;- table(test.frame.local$sex, test.frame.local$dx)
+# then run the command to make proportions, use the second argument to say which dimension of the table to use, the first or the second
+prop.table(sex_table, 1)</code></pre>
+<pre><code>##    
+##            BV       CON
+##   f 0.7142857 0.2857143
+##   m 0.3636364 0.6363636</code></pre>
+<p>This set of commands gives you the proportions of other levels within each level of the first dimension in the table, which is sex, and says that 70% of the females are BV and 30% are CON, and 36% of the males are BV and 64% are CON</p>
+<p>OR</p>
+<p>e.g.</p>
+<pre class="r"><code># first put the data into a table
+sex_table &lt;- table(test.frame.local$sex, test.frame.local$dx)
+# then run the command to make proportions
+prop.table(sex_table, 2)</code></pre>
+<pre><code>##    
+##            BV       CON
+##   f 0.5555556 0.2222222
+##   m 0.4444444 0.7777778</code></pre>
+<p>This gives you the proportions of other levels within each level of the second dimension in the table, which is dx, and says that 55% the BVs are female adn 44% are male, and 22% of the CONs are female and 78% are male</p>
+<p>OR</p>
+<p>e.g.</p>
+<pre class="r"><code># first put the data into a table
+sex_table &lt;- table(test.frame.local$sex, test.frame.local$dx)
+# then run the command to make proportions
+prop.table(sex_table)</code></pre>
+<pre><code>##    
+##            BV       CON
+##   f 0.2777778 0.1111111
+##   m 0.2222222 0.3888889</code></pre>
+<p>This gives you the proportions with respect to all categories, and says that 27% of all the people are BV females, 11% are CON females, 22% are BV males and 39% are CON males</p>
+<p>OR</p>
+<p>You can run the prop.table command with the table command:</p>
+<p>e.g.</p>
+<pre class="r"><code>prop.table(table(test.frame.local$sex, test.frame.local$dx))</code></pre>
+<pre><code>##    
+##            BV       CON
+##   f 0.2777778 0.1111111
+##   m 0.2222222 0.3888889</code></pre>
+</div>
+<div id="getting-percentages-from-cross-tabulated-data" class="section level3">
+<h3>Getting percentages from cross-tabulated data</h3>
+<pre><code>  prop.table(table_object_name, dimension_number)*100</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>prop.table(table(test.frame.local$sex, test.frame.local$dx))*100</code></pre>
+<pre><code>##    
+##           BV      CON
+##   f 27.77778 11.11111
+##   m 22.22222 38.88889</code></pre>
+</div>
+<div id="getting-marginal-counts-from-cross-tabulated-data" class="section level3">
+<h3>Getting marginal counts from cross-tabulated data</h3>
+<pre><code>  Margin.table(table_object_name, dimension_number)</code></pre>
+<pre class="r"><code>margin.table(table(test.frame.local$sex, test.frame.local$dx), 1)</code></pre>
+<pre><code>## 
+##  f  m 
+##  7 11</code></pre>
+<p>OR</p>
+<p>e.g.</p>
+<pre class="r"><code>margin.table(table(test.frame.local$sex, test.frame.local$dx), 2)</code></pre>
+<pre><code>## 
+##  BV CON 
+##   9   9</code></pre>
+</div>
 </div>
 <div id="subsetting-various-ways" class="section level2">
 <h2>Subsetting various ways</h2>
 <div id="get-value-at-a-specific-position-in-a-vector" class="section level3">
 <h3>Get value at a specific position in a vector</h3>
 <pre><code>  Object_name[position]</code></pre>
+<p>e.g.</p>
 <pre class="r"><code>test.char[2]</code></pre>
 <pre><code>## [1] &quot;yann&quot;</code></pre>
 </div>
@@ -1223,7 +1377,7 @@ latter removes multiple objects</code></pre>
 <h3>Querying data frame using conditions</h3>
 <pre><code>Frame_name[frame_name$variable_name condition]</code></pre>
 <p>e.g.</p>
-<p>To get all columns where teh row value for age is more than 60</p>
+<p>To get all columns where the row value for age is more than 60</p>
 <pre class="r"><code>test.frame.local[test.frame.local$age &lt; 60, ]</code></pre>
 <pre><code>##    PIDN age sex  dx visit volume1 volume2
 ## 1  1111  55   m CON     1     100      15

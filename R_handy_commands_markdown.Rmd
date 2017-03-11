@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -1237,6 +1237,7 @@ To specify the number of rows to be shown (instead of the default 6)
       names(dataset_name)
 
 ### List variables in dataset with info about each	  
+      
       str(dataset_name)
       
 Give a bit about type of each variable, and initial few values
@@ -1252,21 +1253,39 @@ For character variables, will give counts for each level
 ### lappy: Apply functions to data
 
     lapply(dataset_name, function, na.rm = TRUE)
+
 NOTE: lapply always returns a list, which will have a bunch of elements, each of which corresponds to the element that was evaluated in the original dataset
 
 e.g.
 
-means <- lapply(my.data, mean, na.rm = TRUE)
+```{r lappy_test_frame_all}
 
-This command will try to take the mean of every column in the dataset my.data, and save those means in a new list
+lapply(test.frame.local, mean)
+
+```
+
+
+This command will try to take the mean of every column in the dataset. Note it gives warnings for the character variables, cause you can't get a mean. 
+
+NOTE that apply wants to work on each element in a vector, so if you give it only one column out of the data frame, it will take the mean for every value in the column separately, like this:
+
+```{r lapply_age}
+
+lapply(test.frame.local$age, mean)
+
+```
+
+BUT, you can subset a couple of columns and do what you want, like this:
+
+```{r lapply_age_vol1}
+
+lapply(test.frame.local[c("age", "volume1")], mean)
+
+```
+
 
 Other functions include sd, var, min, max, median, range, and quantile, or any other function
 
-e.g.
-
-class_list <- lapply(my.data, class)
-
-This command will assess the class of each column in the my.data dataset and pass the class values to a list called class_list
 
 ### sapply: Apply functions and get the result formatted properly	
 
@@ -1368,11 +1387,107 @@ table(test.frame.local$sex, test.frame.local$dx)
 ```
 
 
+### Getting frequencies from cross-tabulated data	
+
+First put the table in an object
+
+      prop.table(table_object_name, dimension_number)
+
+e.g.
+
+```{r prop_table_sex}
+# first put the data into a table
+sex_table <- table(test.frame.local$sex, test.frame.local$dx)
+# then run the command to make proportions, use the second argument to say which dimension of the table to use, the first or the second
+prop.table(sex_table, 1)
+
+```
+This set of commands gives you the proportions of other levels within each level of the first dimension in the table, which is sex, and says that 70% of the females are BV and 30% are CON, and 36% of the males are BV and 64% are CON
+
+OR
+
+e.g.
+
+```{r prop_table_BV}
+# first put the data into a table
+sex_table <- table(test.frame.local$sex, test.frame.local$dx)
+# then run the command to make proportions
+prop.table(sex_table, 2)
+
+```
+
+This gives you the proportions of other levels within each level of the second dimension in the table, which is dx, and says that 55% the BVs are female adn 44% are male, and 22% of the CONs are female and 78% are male
+
+OR
+
+e.g.
+
+```{r prop_table_all}
+# first put the data into a table
+sex_table <- table(test.frame.local$sex, test.frame.local$dx)
+# then run the command to make proportions
+prop.table(sex_table)
+
+```
+
+This gives you the proportions with respect to all categories, and says that 27% of all the people are BV females, 11% are CON females, 22% are BV males and 39% are CON males
+
+OR
+
+You can run the prop.table command with the table command:
+
+e.g.
+
+```{r prop_table_short_all}
+
+prop.table(table(test.frame.local$sex, test.frame.local$dx))
+
+
+```
+
+### Getting percentages from cross-tabulated data	
+
+      prop.table(table_object_name, dimension_number)*100
+
+e.g.
+
+```{r prop_table_short_all_pct}
+
+prop.table(table(test.frame.local$sex, test.frame.local$dx))*100
+
+
+```
+
+### Getting marginal counts from cross-tabulated data	
+
+      Margin.table(table_object_name, dimension_number)
+
+```{r margin_table_sex}
+
+margin.table(table(test.frame.local$sex, test.frame.local$dx), 1)
+
+
+```
+
+OR
+
+e.g.
+
+```{r margin_table_dx}
+
+margin.table(table(test.frame.local$sex, test.frame.local$dx), 2)
+
+
+```
+
+
 ## Subsetting various ways
 
 ### Get value at a specific position in a vector
 
       Object_name[position]
+
+e.g.
 
 ```{r get_name}
 
@@ -1551,7 +1666,7 @@ this command gave us the elements in object test.numbers that was greater than 3
 
 e.g. 
 
-To get all columns where teh row value for age is more than 60
+To get all columns where the row value for age is more than 60
 
 ```{r get_age_gt_70}
 
@@ -1748,6 +1863,4 @@ my.data[ ! complete.cases(my.data), ]
 This command will extract the rows that DO NOT have complete data in the my.data dataset
 
 The complete cases command returns a vector with one line for each line in the data frame, and the value TRUE for those lines that are complete
-
-
 
