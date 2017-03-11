@@ -1250,11 +1250,13 @@ For numeric variables, will give mean, median, max, min and 1st and 3rd quartile
 
 For character variables, will give counts for each level
 
-### lappy: Apply functions to data
+### lappy: Apply functions to multiple elements in an object
 
     lapply(dataset_name, function, na.rm = TRUE)
 
 NOTE: lapply always returns a list, which will have a bunch of elements, each of which corresponds to the element that was evaluated in the original dataset
+
+One major value of using lapply is to do a function iteratively without having to write a loop code
 
 e.g.
 
