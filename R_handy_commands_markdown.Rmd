@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -1865,4 +1865,38 @@ my.data[ ! complete.cases(my.data), ]
 This command will extract the rows that DO NOT have complete data in the my.data dataset
 
 The complete cases command returns a vector with one line for each line in the data frame, and the value TRUE for those lines that are complete
+
+# HYPOTHESIS TESTING
+
+## Chi-square
+
+### Run a Chi-square	
+
+      summary(table_data)
+      
+```{r chi_sq}
+
+summary(sex_table)
+
+```
+
+If you run the summary command on data that is in a table, it will run a chi square
+
+## Correlation
+
+### Run correlations between variables in dataset
+
+      cor(dataset [row, column], use = “complete.obs”)
+
+e.g.
+
+```{r corr}
+
+cor(test.frame.local[ , c("volume1", "volume2")], use="complete.obs")
+
+```
+
+The “complete.obs” tells R to disregard observations with NA. The command will produce a correlation matrix between all indicated variables
+
+
 

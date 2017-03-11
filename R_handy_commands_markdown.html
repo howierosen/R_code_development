@@ -1550,6 +1550,37 @@ OR
 </div>
 </div>
 </div>
+<div id="hypothesis-testing" class="section level1">
+<h1>HYPOTHESIS TESTING</h1>
+<div id="chi-square" class="section level2">
+<h2>Chi-square</h2>
+<div id="run-a-chi-square" class="section level3">
+<h3>Run a Chi-square</h3>
+<pre><code>  summary(table_data)
+  </code></pre>
+<pre class="r"><code>summary(sex_table)</code></pre>
+<pre><code>## Number of cases in table: 18 
+## Number of factors: 2 
+## Test for independence of all factors:
+##  Chisq = 2.1039, df = 1, p-value = 0.1469
+##  Chi-squared approximation may be incorrect</code></pre>
+<p>If you run the summary command on data that is in a table, it will run a chi square</p>
+</div>
+</div>
+<div id="correlation" class="section level2">
+<h2>Correlation</h2>
+<div id="run-correlations-between-variables-in-dataset" class="section level3">
+<h3>Run correlations between variables in dataset</h3>
+<pre><code>  cor(dataset [row, column], use = “complete.obs”)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>cor(test.frame.local[ , c(&quot;volume1&quot;, &quot;volume2&quot;)], use=&quot;complete.obs&quot;)</code></pre>
+<pre><code>##           volume1   volume2
+## volume1 1.0000000 0.1814633
+## volume2 0.1814633 1.0000000</code></pre>
+<p>The “complete.obs” tells R to disregard observations with NA. The command will produce a correlation matrix between all indicated variables</p>
+</div>
+</div>
+</div>
 
 
 
