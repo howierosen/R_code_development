@@ -2,11 +2,12 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 999)
 ```
 
 # CHEAT SHEETS
@@ -21,9 +22,11 @@ https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf
 
 # Created sample datasets
 
+Created several ojects to use as examples for various commands
+
 Created small sample dataset, saved in file named test.frame.csv
 
-It looks like this (commands below read it in and display the data):
+It looks like this (commands below read it from a csv file into an object and display the data):
 
 ```{r load_show_test.frame}
 test.frame.local <- read.csv("test.frame.csv")
@@ -35,6 +38,8 @@ Also creating sample objects
 
 one numeric vector called test.numbers
 
+Looks like this:
+
 ```{r make_vector}
 test.numbers <- c(2, 10, 30, 70, 90, 110)
 test.numbers
@@ -42,12 +47,13 @@ test.numbers
 
 and the other with strings, a character vector called test.char
 
+Looks like this:
+
 ```{r make_char_vector}
 test.char <- c("howie", "yann", "gabe", "adam")
 test.char
 ```
 
-It looks like this (commands below read it in and display the data):
 
 # GENERAL R FUNCTIONS
 
@@ -1813,29 +1819,36 @@ the "with" command sets the environment in which to do the operation. Here, we a
 
 ### Aggregating data	
 
-      Newobjects <- aggregate(data=data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
-
-    OR
-    
-      Newobject <- aggregate(variables_to_aggregate~variables_for_grouping, data=data.frame, FUN=function, na.rm=TRUE)
+        Newobject <- aggregate(variables_to_aggregate ~ variable1_for_grouping + variable2_for_grouping, data=data.frame, FUN=function, na.rm=TRUE)
+        
+        OR
+        
+        Newobjects <- aggregate(data=data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
 
 e.g.
 
-means <- aggregate (size.data, by = list(agegroup, sex), FUN = mean, na.rm = TRUE)
+``` {r agg_means_dx_alt}
 
-This command will aggregate all the numeric data in the dataset called size.data and produce means for each numeric variable grouped according to the agegroup and sex variable (4 means per numeric variable)
+aggregate(test.frame.local$age ~ test.frame.local$dx + test.frame.local$sex, FUN=mean)
+
+```
+
+OR
+
+e.g.
+
+``` {r agg_means_dx}
+
+aggregate(test.frame.local$age, by = list(test.frame.local$dx, test.frame.local$sex), FUN=mean)
+
+```
+
 
 OR, example with more concise code
-
-e.g.
 
 agg_gap_country <- aggregate(.~country, data=gapM, FUN=mean)
 
 Here, you are getting the mean of all the variables in the dataset gapM, divided according to country. The . means all, the ~ means by.
-
-agg_gap_country <- aggregate(pop~country, data=gapM, FUN=mean)
-
-Here, you are doing the same thing, but only for the variable pop
 
 ### Find observations with missing data in a variable of interest	
 
@@ -1886,6 +1899,10 @@ If you run the summary command on data that is in a table, it will run a chi squ
 
 ### Run correlations between variables in dataset
 
+      cor(variable1, variable2, method= "pearson", alternative = "two.sided"")
+      
+      OR
+      
       cor(dataset [row, column], use = “complete.obs”)
 
 e.g.
@@ -1896,7 +1913,257 @@ cor(test.frame.local[ , c("volume1", "volume2")], use="complete.obs")
 
 ```
 
-The “complete.obs” tells R to disregard observations with NA. The command will produce a correlation matrix between all indicated variables
+The “complete.obs” tells R to disregard observations with NA. The command will produce a correlation matrix between all indicated variables. Can actually run without the method and alternative arguments, and it will run pearson and two-sided t.test by default.
+
+Can use method = "kendall" or method = "spearman" for non-parametric correlations (see discussion below for cor.test)
+
+### Run pearson correlation with test stats
+
+      cor.test(variable1, variable2, method= "pearson", alternative = "two.sided"")
+
+```{r corr_test}
+
+cor.test(test.frame.local$volume1, test.frame.local$volume2, method = "pearson", alternative = "two.sided")
+
+```
+
+Can actually run without the method and alternative arguments, and it will run pearson and two-sided t.test by default.
+
+alternative = “less” and alternative = “greater” options specify one-tailed t-test
 
 
+### Run non-parametric correlation with test stats
 
+      cor.test(variable1, variable2, method= "spearman", alternative = "two.sided", exact = FALSE)
+      
+      OR
+      
+      cor.test(variable1, variable2, method= "kendall", alternative = "two.sided", exact = FALSE)
+
+```{r corr_spearman}
+
+cor.test(test.frame.local$volume1, test.frame.local$volume2, method = "spearman", alternative = "two.sided", exact = FALSE)
+
+```
+
+OR
+
+e.g.
+
+```{r corr_kendall}
+
+cor.test(test.frame.local$volume1, test.frame.local$volume2, method = "kendall", alternative = "two.sided", exact = FALSE)
+
+```
+
+alternative = “less” and alternative = “greater” options specify one-tailed t-test
+
+if don't use exact argument, if will assume exact = TRUE and it will have a problem with ties. 
+
+## t-tests
+
+### t-test, independent, two groups	
+
+      t.test(x~y)
+
+e.g.
+
+```{r ttest}
+
+t.test(test.frame.local$age~test.frame.local$dx)
+
+```
+
+OR
+
+e.g. 
+
+```{r ttest_twocol}
+
+t.test(test.frame.local$volume1, test.frame.local$volume2)
+
+```
+
+This would do t-test comparing two numeric variables	Var.equal = TRUE option specifies equal variance and pooled estimate of variance
+
+alternative = “less” and alternative = “greater” options specify one-tailed t-test
+
+### t-test, paired	
+
+      t.test(y1, y2, paired = TRUE)
+
+e.g.
+
+t-test(bpbefore, bpafter, paired = TRUE)
+
+This would do t-test comparing two numeric variables representing repeated values from the same cases (e.g. before and after treatment)
+
+### t-test, one sample	
+
+      t.test(y1, mu = #)
+
+e.g.
+
+t-test(glucose, mu=0)
+
+This would do t-test comparing the observed glucose values to test whether the mean is significantly different from 0
+
+## Regression
+
+### Run regression model	
+
+    Object_name <- lm (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + …, data = dataset_name)
+
+e.g.
+
+```{r regress_vol_dx_age}
+
+lm_vol1 <- lm(test.frame.local$volume1 ~ test.frame.local$dx + test.frame.local$age)
+
+```
+
+This type of linear model cannot handle missing data
+
+### View regression results	
+
+      summary (regression_name)
+e.g.
+
+```{r show_regress}
+
+summary(lm_vol1)
+
+```
+
+### Run anova on previously created linear model
+
+      anova(regression_name)
+
+e.g.
+
+```{r anova_regress}
+
+anova(lm_vol1)
+
+```
+
+### Get coefficients
+
+      coefficients(model_name)
+
+e.g.
+
+```{r coeff_regress}
+
+coefficients(lm_vol1)
+
+```
+
+
+### Get Confidence Intervals
+
+      confint(model_name, level = 0.95)
+
+e.g.
+
+```{r conf_int}
+
+confint(lm_vol1, level = 0.95)
+
+```
+
+This assumes you want 95% confidence interval. You can change level if you want
+
+### Rerun regression with different predictors	
+
+      Object_name(  <- update(regression_name, . ~  new_variable1, new_variable2, …)
+
+e.g.
+
+```{r regress_vol_dx_noage}
+
+lm_vol1_vol2 <- update(lm_vol1, . ~ . -test.frame.local$age)
+summary(lm_vol1_vol2)
+
+```
+
+This command will run the prior linear model without age and save to a new objects
+
+### Compare two linear models using anova	
+
+      anova (model1, model2)
+
+e.g.
+
+```{r anova_compare_regress}
+
+anova(lm_vol1, lm_vol1_vol2)
+
+```
+
+### Run stepwise regression on linear model	
+
+      Object_name <- Step(model1)
+      
+```{r step_vol_dx_age}
+
+lm_vol3 <- step(lm_vol1)
+
+```
+
+## Power and Effect Size
+
+### Effect size using cohen's d
+
+Have to install the "lsr" package: install.packages("lsr")
+
+      library(lsr)
+      cohensD(variable1, variable2)
+      
+      OR
+      
+      cohensD(variable_of_interest ~ factor_variable)
+      
+e.g.
+
+```{r calc_effect_size_age_dx}
+
+library(lsr)
+cohensD(test.frame.local$age ~ test.frame.local$dx)
+
+```
+
+The above command calculated cohen's d for the difference in age between BV and CON (that mean difference was 0.66 years with an sd of 4.06 years)
+
+### Power analysis for t-test using effect size such as cohen's d
+
+Have to install the "pwr" package: install.packages("pwr")
+
+      library(pwr)
+      pwr.t.test(n=sampleSize, d=cohensD, sig.level=value, power=value, type = "two.sample", alternative = "two.sided")
+
+
+```{r calc_power_age_dx}
+
+library(pwr) 
+pwr.t.test(d=0.16, sig.level = 0.05, power = 0.80, type = "two.sample", alternative = "two.sided")
+
+```
+
+The example above used the cohen's d effect size calculated above, leaving out the n=sampleSize argument, which means you are calculating sample size. If you give it sample size and leave out power, it will calculate power.
+
+Can substitute "one.sample" or "paired" for type, and "one.sided" for alternative.
+
+### Power analysis for t-test using mean and sd values
+
+      power.t.test(n=sampleSize, delta=meanDiff, sd=standardDev, sig.level=0.5, power=0.8, type ="two.sample", alternative = "two.sided")
+
+```{r calc_power_mean_sd}
+
+ power.t.test(delta=0.666, sd=4.06, sig.level = 0.05, power = 0.80, type = "two.sample", alternative = "two.sided")
+
+```   
+
+The example above calculated the sample size for each group to find a mean difference of 0.666 with a standard deviation of 4.06. You can see that the sample size estimate is fairly similar to the one above based on cohen's d and the pwr.t.test function
+
+Can substitute "one.sample" or "paired" for type, and "one.sided" for alternative.

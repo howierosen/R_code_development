@@ -132,8 +132,9 @@ $(document).ready(function () {
 </div>
 <div id="created-sample-datasets" class="section level1">
 <h1>Created sample datasets</h1>
+<p>Created several ojects to use as examples for various commands</p>
 <p>Created small sample dataset, saved in file named test.frame.csv</p>
-<p>It looks like this (commands below read it in and display the data):</p>
+<p>It looks like this (commands below read it from a csv file into an object and display the data):</p>
 <pre class="r"><code>test.frame.local &lt;- read.csv(&quot;test.frame.csv&quot;)
 test.frame.local</code></pre>
 <pre><code>##    PIDN age sex  dx visit volume1 volume2
@@ -157,14 +158,15 @@ test.frame.local</code></pre>
 ## 18 6666  59   f CON     2      55      17</code></pre>
 <p>Also creating sample objects</p>
 <p>one numeric vector called test.numbers</p>
+<p>Looks like this:</p>
 <pre class="r"><code>test.numbers &lt;- c(2, 10, 30, 70, 90, 110)
 test.numbers</code></pre>
 <pre><code>## [1]   2  10  30  70  90 110</code></pre>
 <p>and the other with strings, a character vector called test.char</p>
+<p>Looks like this:</p>
 <pre class="r"><code>test.char &lt;- c(&quot;howie&quot;, &quot;yann&quot;, &quot;gabe&quot;, &quot;adam&quot;)
 test.char</code></pre>
 <pre><code>## [1] &quot;howie&quot; &quot;yann&quot;  &quot;gabe&quot;  &quot;adam&quot;</code></pre>
-<p>It looks like this (commands below read it in and display the data):</p>
 </div>
 <div id="general-r-functions" class="section level1">
 <h1>GENERAL R FUNCTIONS</h1>
@@ -1512,20 +1514,29 @@ prop.table(sex_table)</code></pre>
 </div>
 <div id="aggregating-data" class="section level3">
 <h3>Aggregating data</h3>
-<pre><code>  Newobjects &lt;- aggregate(data=data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
-
-OR
-
-  Newobject &lt;- aggregate(variables_to_aggregate~variables_for_grouping, data=data.frame, FUN=function, na.rm=TRUE)</code></pre>
+<pre><code>    Newobject &lt;- aggregate(variables_to_aggregate ~ variable1_for_grouping + variable2_for_grouping, data=data.frame, FUN=function, na.rm=TRUE)
+    
+    OR
+    
+    Newobjects &lt;- aggregate(data=data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)</code></pre>
 <p>e.g.</p>
-<p>means &lt;- aggregate (size.data, by = list(agegroup, sex), FUN = mean, na.rm = TRUE)</p>
-<p>This command will aggregate all the numeric data in the dataset called size.data and produce means for each numeric variable grouped according to the agegroup and sex variable (4 means per numeric variable)</p>
+<pre class="r"><code>aggregate(test.frame.local$age ~ test.frame.local$dx + test.frame.local$sex, FUN=mean)</code></pre>
+<pre><code>##   test.frame.local$dx test.frame.local$sex test.frame.local$age
+## 1                  BV                    f                 59.2
+## 2                 CON                    f                 58.5
+## 3                  BV                    m                 63.5
+## 4                 CON                    m                 61.0</code></pre>
+<p>OR</p>
+<p>e.g.</p>
+<pre class="r"><code>aggregate(test.frame.local$age, by = list(test.frame.local$dx, test.frame.local$sex), FUN=mean)</code></pre>
+<pre><code>##   Group.1 Group.2    x
+## 1      BV       f 59.2
+## 2     CON       f 58.5
+## 3      BV       m 63.5
+## 4     CON       m 61.0</code></pre>
 <p>OR, example with more concise code</p>
-<p>e.g.</p>
 <p>agg_gap_country &lt;- aggregate(.~country, data=gapM, FUN=mean)</p>
 <p>Here, you are getting the mean of all the variables in the dataset gapM, divided according to country. The . means all, the ~ means by.</p>
-<p>agg_gap_country &lt;- aggregate(pop~country, data=gapM, FUN=mean)</p>
-<p>Here, you are doing the same thing, but only for the variable pop</p>
 </div>
 <div id="find-observations-with-missing-data-in-a-variable-of-interest" class="section level3">
 <h3>Find observations with missing data in a variable of interest</h3>
@@ -1571,13 +1582,305 @@ OR
 <h2>Correlation</h2>
 <div id="run-correlations-between-variables-in-dataset" class="section level3">
 <h3>Run correlations between variables in dataset</h3>
-<pre><code>  cor(dataset [row, column], use = “complete.obs”)</code></pre>
+<pre><code>  cor(variable1, variable2, method= &quot;pearson&quot;, alternative = &quot;two.sided&quot;&quot;)
+  
+  OR
+  
+  cor(dataset [row, column], use = “complete.obs”)</code></pre>
 <p>e.g.</p>
 <pre class="r"><code>cor(test.frame.local[ , c(&quot;volume1&quot;, &quot;volume2&quot;)], use=&quot;complete.obs&quot;)</code></pre>
 <pre><code>##           volume1   volume2
 ## volume1 1.0000000 0.1814633
 ## volume2 0.1814633 1.0000000</code></pre>
-<p>The “complete.obs” tells R to disregard observations with NA. The command will produce a correlation matrix between all indicated variables</p>
+<p>The “complete.obs” tells R to disregard observations with NA. The command will produce a correlation matrix between all indicated variables. Can actually run without the method and alternative arguments, and it will run pearson and two-sided t.test by default.</p>
+<p>Can use method = “kendall” or method = “spearman” for non-parametric correlations (see discussion below for cor.test)</p>
+</div>
+<div id="run-pearson-correlation-with-test-stats" class="section level3">
+<h3>Run pearson correlation with test stats</h3>
+<pre><code>  cor.test(variable1, variable2, method= &quot;pearson&quot;, alternative = &quot;two.sided&quot;&quot;)</code></pre>
+<pre class="r"><code>cor.test(test.frame.local$volume1, test.frame.local$volume2, method = &quot;pearson&quot;, alternative = &quot;two.sided&quot;)</code></pre>
+<pre><code>## 
+##  Pearson's product-moment correlation
+## 
+## data:  test.frame.local$volume1 and test.frame.local$volume2
+## t = 0.73811, df = 16, p-value = 0.4711
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.3118245  0.5976966
+## sample estimates:
+##       cor 
+## 0.1814633</code></pre>
+<p>Can actually run without the method and alternative arguments, and it will run pearson and two-sided t.test by default.</p>
+<p>alternative = “less” and alternative = “greater” options specify one-tailed t-test</p>
+</div>
+<div id="run-non-parametric-correlation-with-test-stats" class="section level3">
+<h3>Run non-parametric correlation with test stats</h3>
+<pre><code>  cor.test(variable1, variable2, method= &quot;spearman&quot;, alternative = &quot;two.sided&quot;, exact = FALSE)
+  
+  OR
+  
+  cor.test(variable1, variable2, method= &quot;kendall&quot;, alternative = &quot;two.sided&quot;, exact = FALSE)</code></pre>
+<pre class="r"><code>cor.test(test.frame.local$volume1, test.frame.local$volume2, method = &quot;spearman&quot;, alternative = &quot;two.sided&quot;, exact = FALSE)</code></pre>
+<pre><code>## 
+##  Spearman's rank correlation rho
+## 
+## data:  test.frame.local$volume1 and test.frame.local$volume2
+## S = 732.18, p-value = 0.3284
+## alternative hypothesis: true rho is not equal to 0
+## sample estimates:
+##      rho 
+## 0.244399</code></pre>
+<p>OR</p>
+<p>e.g.</p>
+<pre class="r"><code>cor.test(test.frame.local$volume1, test.frame.local$volume2, method = &quot;kendall&quot;, alternative = &quot;two.sided&quot;, exact = FALSE)</code></pre>
+<pre><code>## 
+##  Kendall's rank correlation tau
+## 
+## data:  test.frame.local$volume1 and test.frame.local$volume2
+## z = 1.0744, p-value = 0.2826
+## alternative hypothesis: true tau is not equal to 0
+## sample estimates:
+##       tau 
+## 0.1937821</code></pre>
+<p>alternative = “less” and alternative = “greater” options specify one-tailed t-test</p>
+<p>if don’t use exact argument, if will assume exact = TRUE and it will have a problem with ties.</p>
+</div>
+</div>
+<div id="t-tests" class="section level2">
+<h2>t-tests</h2>
+<div id="t-test-independent-two-groups" class="section level3">
+<h3>t-test, independent, two groups</h3>
+<pre><code>  t.test(x~y)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>t.test(test.frame.local$age~test.frame.local$dx)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  test.frame.local$age by test.frame.local$dx
+## t = 0.3386, df = 13.027, p-value = 0.7403
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.585969  4.919302
+## sample estimates:
+##  mean in group BV mean in group CON 
+##          61.11111          60.44444</code></pre>
+<p>OR</p>
+<p>e.g.</p>
+<pre class="r"><code>t.test(test.frame.local$volume1, test.frame.local$volume2)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  test.frame.local$volume1 and test.frame.local$volume2
+## t = 19.175, df = 20.719, p-value = 0.00000000000001155
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  52.00165 64.66502
+## sample estimates:
+## mean of x mean of y 
+##  73.72222  15.38889</code></pre>
+<p>This would do t-test comparing two numeric variables Var.equal = TRUE option specifies equal variance and pooled estimate of variance</p>
+<p>alternative = “less” and alternative = “greater” options specify one-tailed t-test</p>
+</div>
+<div id="t-test-paired" class="section level3">
+<h3>t-test, paired</h3>
+<pre><code>  t.test(y1, y2, paired = TRUE)</code></pre>
+<p>e.g.</p>
+<p>t-test(bpbefore, bpafter, paired = TRUE)</p>
+<p>This would do t-test comparing two numeric variables representing repeated values from the same cases (e.g. before and after treatment)</p>
+</div>
+<div id="t-test-one-sample" class="section level3">
+<h3>t-test, one sample</h3>
+<pre><code>  t.test(y1, mu = #)</code></pre>
+<p>e.g.</p>
+<p>t-test(glucose, mu=0)</p>
+<p>This would do t-test comparing the observed glucose values to test whether the mean is significantly different from 0</p>
+</div>
+</div>
+<div id="regression" class="section level2">
+<h2>Regression</h2>
+<div id="run-regression-model" class="section level3">
+<h3>Run regression model</h3>
+<pre><code>Object_name &lt;- lm (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + …, data = dataset_name)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>lm_vol1 &lt;- lm(test.frame.local$volume1 ~ test.frame.local$dx + test.frame.local$age)</code></pre>
+<p>This type of linear model cannot handle missing data</p>
+</div>
+<div id="view-regression-results" class="section level3">
+<h3>View regression results</h3>
+<pre><code>  summary (regression_name)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>summary(lm_vol1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = test.frame.local$volume1 ~ test.frame.local$dx + 
+##     test.frame.local$age)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -22.2516  -8.4509   0.4654   6.6075  20.2054 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)            109.9624    45.6216   2.410   0.0292 *
+## test.frame.local$dxCON   4.7984     5.8761   0.817   0.4269  
+## test.frame.local$age    -0.6357     0.7435  -0.855   0.4059  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 12.42 on 15 degrees of freedom
+## Multiple R-squared:  0.09238,    Adjusted R-squared:  -0.02864 
+## F-statistic: 0.7634 on 2 and 15 DF,  p-value: 0.4834</code></pre>
+</div>
+<div id="run-anova-on-previously-created-linear-model" class="section level3">
+<h3>Run anova on previously created linear model</h3>
+<pre><code>  anova(regression_name)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>anova(lm_vol1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: test.frame.local$volume1
+##                      Df  Sum Sq Mean Sq F value Pr(&gt;F)
+## test.frame.local$dx   1  122.72  122.72  0.7955 0.3865
+## test.frame.local$age  1  112.81  112.81  0.7312 0.4059
+## Residuals            15 2314.08  154.27</code></pre>
+</div>
+<div id="get-coefficients" class="section level3">
+<h3>Get coefficients</h3>
+<pre><code>  coefficients(model_name)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>coefficients(lm_vol1)</code></pre>
+<pre><code>##            (Intercept) test.frame.local$dxCON   test.frame.local$age 
+##            109.9624027              4.7983900             -0.6357484</code></pre>
+</div>
+<div id="get-confidence-intervals" class="section level3">
+<h3>Get Confidence Intervals</h3>
+<pre><code>  confint(model_name, level = 0.95)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>confint(lm_vol1, level = 0.95)</code></pre>
+<pre><code>##                            2.5 %      97.5 %
+## (Intercept)            12.722191 207.2026145
+## test.frame.local$dxCON -7.726176  17.3229561
+## test.frame.local$age   -2.220386   0.9488891</code></pre>
+<p>This assumes you want 95% confidence interval. You can change level if you want</p>
+</div>
+<div id="rerun-regression-with-different-predictors" class="section level3">
+<h3>Rerun regression with different predictors</h3>
+<pre><code>  Object_name(  &lt;- update(regression_name, . ~  new_variable1, new_variable2, …)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>lm_vol1_vol2 &lt;- update(lm_vol1, . ~ . -test.frame.local$age)
+summary(lm_vol1_vol2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = test.frame.local$volume1 ~ test.frame.local$dx)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -21.333  -6.278  -1.111   3.833  23.667 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value         Pr(&gt;|t|)    
+## (Intercept)              71.111      4.105  17.322 0.00000000000867 ***
+## test.frame.local$dxCON    5.222      5.806   0.899            0.382    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 12.32 on 16 degrees of freedom
+## Multiple R-squared:  0.04813,    Adjusted R-squared:  -0.01136 
+## F-statistic: 0.8091 on 1 and 16 DF,  p-value: 0.3817</code></pre>
+<p>This command will run the prior linear model without age and save to a new objects</p>
+</div>
+<div id="compare-two-linear-models-using-anova" class="section level3">
+<h3>Compare two linear models using anova</h3>
+<pre><code>  anova (model1, model2)</code></pre>
+<p>e.g.</p>
+<pre class="r"><code>anova(lm_vol1, lm_vol1_vol2)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: test.frame.local$volume1 ~ test.frame.local$dx + test.frame.local$age
+## Model 2: test.frame.local$volume1 ~ test.frame.local$dx
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     15 2314.1                           
+## 2     16 2426.9 -1   -112.81 0.7312 0.4059</code></pre>
+</div>
+<div id="run-stepwise-regression-on-linear-model" class="section level3">
+<h3>Run stepwise regression on linear model</h3>
+<pre><code>  Object_name &lt;- Step(model1)
+  </code></pre>
+<pre class="r"><code>lm_vol3 &lt;- step(lm_vol1)</code></pre>
+<pre><code>## Start:  AIC=93.42
+## test.frame.local$volume1 ~ test.frame.local$dx + test.frame.local$age
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - test.frame.local$dx   1    102.87 2416.9 92.198
+## - test.frame.local$age  1    112.81 2426.9 92.272
+## &lt;none&gt;                              2314.1 93.415
+## 
+## Step:  AIC=92.2
+## test.frame.local$volume1 ~ test.frame.local$age
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - test.frame.local$age  1    132.66 2549.6 91.160
+## &lt;none&gt;                              2416.9 92.198
+## 
+## Step:  AIC=91.16
+## test.frame.local$volume1 ~ 1</code></pre>
+</div>
+</div>
+<div id="power-and-effect-size" class="section level2">
+<h2>Power and Effect Size</h2>
+<div id="effect-size-using-cohens-d" class="section level3">
+<h3>Effect size using cohen’s d</h3>
+<p>Have to install the “lsr” package: install.packages(“lsr”)</p>
+<pre><code>  library(lsr)
+  cohensD(variable1, variable2)
+  
+  OR
+  
+  cohensD(variable_of_interest ~ factor_variable)
+  </code></pre>
+<p>e.g.</p>
+<pre class="r"><code>library(lsr)
+cohensD(test.frame.local$age ~ test.frame.local$dx)</code></pre>
+<pre><code>## [1] 0.1596174</code></pre>
+<p>The above command calculated cohen’s d for the difference in age between BV and CON (that mean difference was 0.66 years with an sd of 4.06 years)</p>
+</div>
+<div id="power-analysis-for-t-test-using-effect-size-such-as-cohens-d" class="section level3">
+<h3>Power analysis for t-test using effect size such as cohen’s d</h3>
+<p>Have to install the “pwr” package: install.packages(“pwr”)</p>
+<pre><code>  library(pwr)
+  pwr.t.test(n=sampleSize, d=cohensD, sig.level=value, power=value, type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)</code></pre>
+<pre class="r"><code>library(pwr) 
+pwr.t.test(d=0.16, sig.level = 0.05, power = 0.80, type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)</code></pre>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 614.1541
+##               d = 0.16
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>The example above used the cohen’s d effect size calculated above, leaving out the n=sampleSize argument, which means you are calculating sample size. If you give it sample size and leave out power, it will calculate power.</p>
+<p>Can substitute “one.sample” or “paired” for type, and “one.sided” for alternative.</p>
+</div>
+<div id="power-analysis-for-t-test-using-mean-and-sd-values" class="section level3">
+<h3>Power analysis for t-test using mean and sd values</h3>
+<pre><code>  power.t.test(n=sampleSize, delta=meanDiff, sd=standardDev, sig.level=0.5, power=0.8, type =&quot;two.sample&quot;, alternative = &quot;two.sided&quot;)</code></pre>
+<pre class="r"><code> power.t.test(delta=0.666, sd=4.06, sig.level = 0.05, power = 0.80, type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)</code></pre>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 584.3281
+##           delta = 0.666
+##              sd = 4.06
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>The example above calculated the sample size for each group to find a mean difference of 0.666 with a standard deviation of 4.06. You can see that the sample size estimate is fairly similar to the one above based on cohen’s d and the pwr.t.test function</p>
+<p>Can substitute “one.sample” or “paired” for type, and “one.sided” for alternative.</p>
 </div>
 </div>
 </div>
