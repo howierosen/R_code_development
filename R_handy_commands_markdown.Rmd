@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -1823,7 +1823,7 @@ the "with" command sets the environment in which to do the operation. Here, we a
         
         OR
         
-        Newobjects <- aggregate(data=data.frame, by = list (factor_var1, factor_var2…, FUN = function, na.rm = TRUE)
+        Newobjects <- aggregate(data=data.frame, by = list (factor_var1, factor_var2…), FUN = function, na.rm = TRUE)
 
 e.g.
 
@@ -2167,3 +2167,153 @@ Can substitute "one.sample" or "paired" for type, and "one.sided" for alternativ
 The example above calculated the sample size for each group to find a mean difference of 0.666 with a standard deviation of 4.06. You can see that the sample size estimate is fairly similar to the one above based on cohen's d and the pwr.t.test function
 
 Can substitute "one.sample" or "paired" for type, and "one.sided" for alternative.
+
+## Graphics and Pretty Output
+
+### Plot data generically	P
+
+      plot(variable1, variable2, ...)
+      
+      OR
+      
+      plot(dataset)
+
+R will choose the appropriate plot based on the type of data you've asked it to plot
+
+e.g.
+
+```{r plot_generic}
+
+ plot(test.frame.local)
+
+```   
+
+OR
+
+```{r plot_age_dx}
+
+ plot(test.frame.local$age~test.frame.local$dx)
+
+```  
+
+OR
+
+e.g.
+
+```{r plot_age_vol}
+
+ plot(test.frame.local$age~test.frame.local$volume1)
+
+```
+
+### Labelling Plots
+
+      xlab = "text"
+      ylab = "text"
+      main= "text"
+
+e.g
+
+```{r plot_age_vol_lab}
+
+ plot(test.frame.local$age~test.frame.local$volume1, xlab="brain volume", ylab = "age", main = "Volume by Age")
+
+```
+
+### Boxplots
+
+      boxplot	Boxplot(dataset_name$variable)
+
+If you want to do conditional plot using lattice package version, use:
+
+      bwplot(factor_variable~numeric_variable)
+
+e.g.
+
+```{r box_age_dx}
+
+library(lattice)
+bwplot(test.frame.local$age~test.frame.local$dx)
+
+```
+
+### Histograms
+
+      hist(dataset_name$variable)
+
+This will give counts for each interval
+
+      hist(dataset_name$variable, prob = TRUE)
+
+This will give probabilities for each interval instead of counts
+
+
+If you want to use teh version from the lattice package:
+
+      library(lattice)
+      Histogram( ~ variable | factor_variable, data = dataset_name)
+
+OR
+
+      Histogram(condition ~ variable | condition, data = dataset_name, type = “statistic”, nint=number_of_bins)
+      
+Type can be "percent", "count", or "density"
+
+e.g.
+
+```{r hist_age_dx}
+
+library(lattice)
+histogram(~test.frame.local$age | test.frame.local$sex, type = "count", nint = 10)
+
+```
+
+
+### Scatterplot
+
+      scatterplot(variable1~variable2, smoother=FALSE)
+      
+      OR, to separate plots by categorical variable:
+      
+      scatterplot(variable1~variable2 | factor_variable, smoother=FALSE)
+      
+e.g.
+
+```{r scatter_age_vol_dx}
+
+library(car)
+scatterplot(test.frame.local$age~test.frame.local$volume1 | test.frame.local$dx, smoother=FALSE)
+
+```
+
+
+### Make a nice table in markdown
+
+      library(knitr)
+      knitr::kable(table_name. col_names = "column_names")
+      
+e.g.
+
+The following commands will output a nice table if you run in R markdown and Knit Word. This will be able to be formatted and handled in word like any other table
+
+```{r nice_counts_table}
+
+sex_tab <- table(test.frame.local$sex, test.frame.local$dx)
+library(knitr)
+knitr::kable(sex_tab)
+
+```
+
+In this case, it used the names of the levels in diagnosis and sex as column names
+
+But, you can specify the column names
+
+e.g.
+
+```{r nice_means_table}
+
+means_table <- aggregate(test.frame.local$age ~ test.frame.local$dx + test.frame.local$sex, FUN=mean)
+library(knitr)
+knitr::kable(means_table, col.names = c("Diagnosis", "Sex", "Mean Age"))
+
+```
