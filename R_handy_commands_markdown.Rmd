@@ -1806,14 +1806,13 @@ by(test.frame.local$age, test.frame.local$dx, mean)
       with(data, expresssion) 
 e.g.
 
-```{r mean_age_bv_only}
+```{r mean_age_con_only}
 
-with(test.frame.local[test.frame.local$dx=="BV", ], mean(test.frame.local$age))
-
+mean(with(test.frame.local, test.frame.local[dx=="CON", "age"]))
 
 ```
 
-this command with provide the means for the variable age for those with a diagnosis of FTD
+this command with provide the mean for the variable age for those with a diagnosis of CON
 
 the "with" command sets the environment in which to do the operation. Here, we are telling it what data frame to use, then within the square brackets we are specifying the dataset to create in which to run the analysis, meaning a new dataset made up of all columns for the rows where the dx variable has a value of BV
 
@@ -1970,7 +1969,7 @@ e.g.
 
 ```{r ttest}
 
-t.test(test.frame.local$age~test.frame.local$dx)
+t.test(test.frame.local$age ~ test.frame.local$dx)
 
 ```
 
