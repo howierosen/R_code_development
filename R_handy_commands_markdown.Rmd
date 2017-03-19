@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -1500,6 +1500,29 @@ margin.table(table(test.frame.local$sex, test.frame.local$dx), 2)
 
 ## Subsetting various ways
 
+### Dropping levels from a subset
+
+NOTE that subsetting does not usually drop the unused levels from the new subset, it just doesn't have any data in them. This can mess up certain programs like cohensD. To completely drop teh levels, use the droplevels command
+
+e.g.
+
+``` {r subset_levels}
+
+# here is the original data frame, which has 3 levels: AD, BV and CON
+test.frame.3c
+# exclude the BV cases and put the results in a new object
+test.2c <- subset(test.frame.3c, test.frame.3c$dx=="CON" |  test.frame.3c$dx=="AD")
+# new object shows only 2 levels in dx: AD and CON
+test.2c
+# but levels command shows the BV level is still in the new object
+levels(test.2c$dx)
+# droplevels commands clears the unused level
+test.2c <- droplevels(test.2c)
+levels(test.2c$dx)
+
+```
+
+
 ### Get value at a specific position in a vector
 
       Object_name[position]
@@ -2142,6 +2165,18 @@ cohensD(test.frame.local$age ~ test.frame.local$dx)
 ```
 
 The above command calculated cohen's d for the difference in age between BV and CON (that mean difference was 0.66 years with an sd of 4.06 years)
+
+### Cohen's d with subsetting
+
+Cohen's d will only work if there are two levels in the factor you're using to compare levels. If you have a dataset with more than 2 levels, you have to subset to make a new dataset with only two levels. For some reason, in order to use cohen's d, you have to apply drop levels command. For example, below we'll pick two levels to test in our dataset that has 3 levels
+
+```{r drop_levels_for_cohensD}
+
+co_d_test <- with(test.frame.3c, test.frame.3c[test.frame.3c$dx!="CON", ])
+co_d_test <-  droplevels(co_d_test)
+cohensD(co_d_test$age ~ co_d_test$dx)
+
+```
 
 ### Power analysis for t-test using effect size such as cohen's d
 
