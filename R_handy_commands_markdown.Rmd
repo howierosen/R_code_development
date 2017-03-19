@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -38,7 +38,7 @@ Created another sample dataset with 3 categorise, saved in file named test.frame
 
 It looks like this (commands below read it from a csv file into an object and display the data):
 
-```{r load_show_test.frame}
+```{r load_show_3cat_test.frame}
 test.frame.3c <- read.csv("test.frame.3c.csv")
 test.frame.3c
 ```

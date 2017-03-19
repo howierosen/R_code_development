@@ -156,6 +156,37 @@ test.frame.local</code></pre>
 ## 16 5555  69   m  BV     4      60      10
 ## 17 6666  58   f CON     1      60      18
 ## 18 6666  59   f CON     2      55      17</code></pre>
+<p>Created another sample dataset with 3 categorise, saved in file named test.frame.3c.csv</p>
+<p>It looks like this (commands below read it from a csv file into an object and display the data):</p>
+<pre class="r"><code>test.frame.3c &lt;- read.csv(&quot;test.frame.3c.csv&quot;)
+test.frame.3c</code></pre>
+<pre><code>##    PIDN age sex  dx visit volume1 volume2
+## 1  1111  55   f CON     1     100      15
+## 2  1111  56   f CON     2      90      11
+## 3  1111  57   m CON     3      80      10
+## 4  1111  58   m CON     4      70       9
+## 5  2222  60   f  BV     1      90      18
+## 6  2222  61   f  BV     2      85      19
+## 7  2222  62   m  BV     3      75      17
+## 8  3333  66   m CON     1      80      22
+## 9  3333  67   m CON     2      77      20
+## 10 3333  68   m CON     3      75      20
+## 11 4444  56   f  BV     1      70      19
+## 12 4444  57   f  BV     2      65      14
+## 13 5555  66   m  BV     1      70      15
+## 14 5555  67   m  BV     2      65      12
+## 15 5555  68   m  BV     3      60      11
+## 16 5555  69   m  BV     4      60      10
+## 17 6666  58   f CON     1      60      18
+## 18 6666  59   f CON     2      55      17
+## 19 7777  74   m  AD     1      50      12
+## 20 7777  75   m  AD     2      40      11
+## 21 7777  76   m  AD     3      30      10
+## 22 8888  80   f  AD     1      60      10
+## 23 8888  81   f  AD     2      55       9
+## 24 9999  78   f  AD     1      50      12
+## 25 9999  80   f  AD     2      40      10
+## 26 9999  89   f  AD     3      30       8</code></pre>
 <p>Also creating sample objects</p>
 <p>one numeric vector called test.numbers</p>
 <p>Looks like this:</p>
@@ -1507,9 +1538,9 @@ prop.table(sex_table)</code></pre>
 <h3>With function: Apply a function to some data specifying the data that goes into the function (or limiting the input)</h3>
 <pre><code>  with(data, expresssion) </code></pre>
 <p>e.g.</p>
-<pre class="r"><code>with(subset(test.frame.local, test.frame.local$dx==&quot;CON&quot;), mean(test.frame.local$age))</code></pre>
-<pre><code>## [1] 61.66667</code></pre>
-<p>this command with provide the means for the variable age for those with a diagnosis of FTD</p>
+<pre class="r"><code>with(test.frame.local[test.frame.local$dx==&quot;CON&quot;, ], mean(age))</code></pre>
+<pre><code>## [1] 60.44444</code></pre>
+<p>this command with provide the mean for the variable age for those with a diagnosis of CON</p>
 <p>the “with” command sets the environment in which to do the operation. Here, we are telling it what data frame to use, then within the square brackets we are specifying the dataset to create in which to run the analysis, meaning a new dataset made up of all columns for the rows where the dx variable has a value of BV</p>
 </div>
 <div id="aggregating-data" class="section level3">
@@ -1652,11 +1683,11 @@ prop.table(sex_table)</code></pre>
 <h3>t-test, independent, two groups</h3>
 <pre><code>  t.test(x~y)</code></pre>
 <p>e.g.</p>
-<pre class="r"><code>t.test(test.frame.local$age ~ test.frame.local$dx)</code></pre>
+<pre class="r"><code>with(test.frame.3c[test.frame.3c$dx==&quot;CON&quot; | test.frame.3c$dx==&quot;BV&quot;, ], t.test(age ~ dx))</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
-## data:  test.frame.local$age by test.frame.local$dx
+## data:  age by dx
 ## t = 1.0488, df = 15.953, p-value = 0.3099
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
