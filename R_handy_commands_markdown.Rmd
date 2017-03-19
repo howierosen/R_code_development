@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: word_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -33,6 +33,15 @@ test.frame.local <- read.csv("test.frame.csv")
 test.frame.local
 ```
 
+
+Created another sample dataset with 3 categorise, saved in file named test.frame.3c.csv
+
+It looks like this (commands below read it from a csv file into an object and display the data):
+
+```{r load_show_test.frame}
+test.frame.3c <- read.csv("test.frame.3c.csv")
+test.frame.3c
+```
 
 Also creating sample objects
 
@@ -1808,7 +1817,7 @@ e.g.
 
 ```{r mean_age_con_only}
 
-mean(with(test.frame.local, test.frame.local[dx=="CON", "age"]))
+with(test.frame.local[test.frame.local$dx=="CON", ], mean(age))
 
 ```
 
@@ -1969,7 +1978,7 @@ e.g.
 
 ```{r ttest}
 
-t.test(test.frame.local$age ~ test.frame.local$dx)
+with(test.frame.3c[test.frame.3c$dx=="CON" | test.frame.3c$dx=="BV", ], t.test(age ~ dx))
 
 ```
 
