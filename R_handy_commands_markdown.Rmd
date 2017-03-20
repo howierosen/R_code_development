@@ -2043,7 +2043,7 @@ This would do t-test comparing the observed glucose values to test whether the m
 
 ### Run regression model	
 
-    Object_name <- lm (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + …, data = dataset_name)
+    Object_name <- lm (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + ..., data = dataset_name)
 
 e.g.
 
@@ -2066,7 +2066,7 @@ summary(lm_vol1)
 
 ```
 
-### Run anova on previously created linear model
+### Run anova on a linear model you've already created
 
       anova(regression_name)
 
@@ -2105,7 +2105,38 @@ confint(lm_vol1, level = 0.95)
 
 This assumes you want 95% confidence interval. You can change level if you want
 
-### Rerun regression with different predictors	
+### Run regression WITH interactions
+
+    Object_name <- lm (dep_variable ~ indep_variable1 + indep_variable2*indep_varialble3 + ..., data = dataset_name)
+
+e.g.
+Model below will test for effect of age on volume, including looking for possible interaction between age and diagnosis in predicting volume. This is using the data frame with 3 levels for diagnosis
+
+```{r regress_vol_dx_by_age}
+
+# here is the model with interaction included
+lm_age_dx <- lm(test.frame.3c$volume1 ~ test.frame.3c$age*test.frame.3c$dx)
+anova(lm_age_dx)
+summary(lm_age_dx)
+
+# the anova table indicates that there is no interaction between age and diagnosis, but there is a significant relationship between age and volume1. In th above model, the age coefficient is just in AD. Now we'll rerun the model without the interaction, so that we get the coefficient for age
+
+lm_age_dx2 <- lm(test.frame.3c$volume1 ~ test.frame.3c$age + test.frame.3c$dx)
+anova(lm_age_dx2)
+summary(lm_age_dx2)
+
+```
+
+
+### Get marginal means from a regression model
+
+      lsmeans(model_name, variable1, by=factor_variable)
+      
+e.g.
+
+
+
+### Rerun prior regression with different predictors	
 
       Object_name(  <- update(regression_name, . ~  new_variable1, new_variable2, …)
 
@@ -2139,6 +2170,43 @@ anova(lm_vol1, lm_vol1_vol2)
 ```{r step_vol_dx_age}
 
 lm_vol3 <- step(lm_vol1)
+
+```
+
+## Mixed Linear Models
+
+### Run Mixed Linear Model
+
+This is syntax using lme, part of nlme package.
+
+    Object_name <- lme (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + ..., random = 1 | random_variable, data = dataset_name)
+
+e.g.
+below, we are looking to see whether there is a an effect of visit on volume1, and whether there is an interaction wiht diagnosis
+
+``` {r mixed_visit_volume1}
+
+# here is the model with interaction included. Shows there is an effect of visit and an interaction with diagnosis, such that BV has a bit less volume1 loss per visit compared with AD. CON also shrink less than AD, but they have more variability at each timepoint, so difference vs AD is not significant
+
+library(nlme)
+mlm_vis_vol1 <- lme (volume1 ~ visit * dx,  random =~ 1|PIDN, data=test.frame.3c, method = "REML")
+anova(mlm_vis_vol1)
+summary(mlm_vis_vol1)
+library(car)
+scatterplot(test.frame.3c$volume1~test.frame.3c$visit | test.frame.3c$dx)
+
+```
+
+Can also run linear mixed model using lmer funciton, part of the lme4 package. This uses restricted maximum likelihood. Syntax is a bit different:
+
+      Object_name <- lmer (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + (1 | random_variable), data = dataset_name)
+
+```{r mixed_visit_volume1_alt}
+
+library(lme4)
+mlm_vis_vol2 <- lmer(volume1 ~ visit * dx + (1|PIDN), data=test.frame.3c)
+anova(mlm_vis_vol2)
+summary(mlm_vis_vol2)
 
 ```
 
