@@ -2,7 +2,7 @@
 title: "R_handy_commands"
 author: "Howie Rosen"
 date: "3/8/2017"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -31,6 +31,7 @@ It looks like this (commands below read it from a csv file into an object and di
 ```{r load_show_test.frame}
 test.frame.local <- read.csv("test.frame.csv")
 test.frame.local
+
 ```
 
 
@@ -41,6 +42,12 @@ It looks like this (commands below read it from a csv file into an object and di
 ```{r load_show_3cat_test.frame}
 test.frame.3c <- read.csv("test.frame.3c.csv")
 test.frame.3c
+
+#str(test.frame.3c) # note that visit is an integer, but it should be a factor, we will 
+# test.frame.3c$visit <- as.ordered(test.frame.3c$visit)
+# class(test.frame.3c$visit)
+# levels(test.frame.3c$visit)
+
 ```
 
 Also creating sample objects
@@ -173,6 +180,18 @@ This will display all previous commands
     source(“myfilename”)
 
 If no filename or path is specified, will look in current directory
+
+### Disable scientific notation in output
+  
+    options(scipen=999)
+    
+    OR
+    
+    format(functionResult, scientific=FALSE)
+    
+    OR
+    
+    as.integer(functionResult)
 
 
 ## Working with data files
@@ -587,6 +606,38 @@ Can  also use this to rename all the variables in a dataset, but you must enter 
 OR if data are ordinal instead of factor variable
 
 mydata$v1 <- ordered(mydata$v1,levels = c(1, 2, 3), labels = c( “young”, “middle-age”, “old” )
+
+
+### Converting an integer variable to a factor (categorical)
+
+      as.factor(variable_name)
+      
+e.g.
+
+```{r convert_to_factor}
+
+test.frame.3c.int2fac <- read.csv("test.frame.3c.csv")
+class(test.frame.3c.int2fac$visit)
+test.frame.3c.int2fac$visit <- as.factor(test.frame.3c.int2fac$visit)
+class(test.frame.3c.int2fac$visit)
+levels(test.frame.3c.int2fac$visit)
+
+```
+
+      
+### Converting an integer variable to an ordinal factor
+
+      as.ordered(variable_name)
+
+```{r convert_to_ordered}
+
+test.frame.3c.int2ord <- read.csv("test.frame.3c.csv")
+class(test.frame.3c.int2ord$visit)
+test.frame.3c.int2ord$visit <- as.ordered(test.frame.3c.int2ord$visit)
+class(test.frame.3c.int2ord$visit)
+levels(test.frame.3c.int2ord$visit)
+
+```
 
 ### Vector operations	
 
@@ -2130,11 +2181,16 @@ summary(lm_age_dx2)
 
 ### Get marginal means from a regression model
 
-      lsmeans(model_name, variable1, by=factor_variable)
+      lsmeans(model_name, factor_variable1, by=other_factor_variable)
       
 e.g.
 
+```{r lsmeans_volume_dx}
 
+library(lsmeans)
+lsmeans(lm_age_dx2, "test.frame.3c$dx")
+
+```
 
 ### Rerun prior regression with different predictors	
 
@@ -2179,7 +2235,7 @@ lm_vol3 <- step(lm_vol1)
 
 This is syntax using lme, part of nlme package.
 
-    Object_name <- lme (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + ..., random = 1 | random_variable, data = dataset_name)
+    Object_name <- lme (dep_variable ~ indep_variable1 + indep_variable2 + indep_varialble3 + ..., random =~ 1 | random_variable, data = dataset_name)
 
 e.g.
 below, we are looking to see whether there is a an effect of visit on volume1, and whether there is an interaction wiht diagnosis
@@ -2188,12 +2244,15 @@ below, we are looking to see whether there is a an effect of visit on volume1, a
 
 # here is the model with interaction included. Shows there is an effect of visit and an interaction with diagnosis, such that BV has a bit less volume1 loss per visit compared with AD. CON also shrink less than AD, but they have more variability at each timepoint, so difference vs AD is not significant
 
+test.frame.3c$visit <- ordered(test.frame.3c$visit)
+class(test.frame.3c$visit)
 library(nlme)
-mlm_vis_vol1 <- lme (volume1 ~ visit * dx,  random =~ 1|PIDN, data=test.frame.3c, method = "REML")
+mlm_vis_vol1 <- lme (volume1 ~ visit +  dx, random =~ 1|PIDN, data=test.frame.3c)
 anova(mlm_vis_vol1)
 summary(mlm_vis_vol1)
 library(car)
-scatterplot(test.frame.3c$volume1~test.frame.3c$visit | test.frame.3c$dx)
+# bwplot(test.frame.3c$volume1~test.frame.3c$visit |  test.frame.3c$dx)
+lsmeans(mlm_vis_vol1, "visit", by="dx") # note the marginal means don't look like the raw means shown in the boxplots, because they are adjusted for age
 
 ```
 
